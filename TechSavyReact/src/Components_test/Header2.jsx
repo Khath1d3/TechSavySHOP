@@ -1,11 +1,11 @@
 import {Link,useLocation} from "react-router-dom";
 import "../componentStyle/Header2style.css";
-import Modal from "../Components/modal";
+import Modal from "./modal";
 import { useState,useContext } from "react";
-import Signup from "../Components/signup";
-import Login from "../Components/login";
-import ForgotPassword from "../Components/ForgotPassword";
-import AccountList from "../Components/AccountList";
+import Signup from "./signup";
+import Login from "./login";
+import ForgotPassword from "./ForgotPassword";
+import AccountList from "./AccountList";
 import { AuthContext } from "../assets/AuthContext";
 import { useCart } from "../assets/CartContext";
 import { FaUser, FaBars, FaTimes } from "react-icons/fa";

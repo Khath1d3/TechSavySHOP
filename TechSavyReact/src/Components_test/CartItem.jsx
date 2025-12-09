@@ -1,5 +1,5 @@
 import React ,{useState, useEffect} from "react";
-import {postData} from "../Components/ApiService";
+import {postData} from "./ApiService";
 import {useLoader} from "../assets/LoaderContext";
 import {useCart} from "../assets/CartContext";
 import {useNavigate} from "react-router-dom";

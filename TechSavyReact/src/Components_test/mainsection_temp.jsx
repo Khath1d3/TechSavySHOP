@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import DeviceCard from "../Components/DeviceCard";
-import { getData } from "../Components/ApiService";
+import DeviceCard from "./DeviceCard";
+import { getData } from "./ApiService";
 import { useLoader } from "../assets/LoaderContext";
 
 function MainSection() {

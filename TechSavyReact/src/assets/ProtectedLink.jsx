@@ -2,8 +2,8 @@
 import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
-import Login from '../Components/login';
-import Modal from '../Components/modal';
+import Login from '../Components_test/login';
+import Modal from '../Components_test/modal';
 
 export default function ProtectedLink({ 
     to, 

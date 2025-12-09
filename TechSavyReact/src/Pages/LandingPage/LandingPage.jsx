@@ -1,8 +1,8 @@
 import React from 'react'
 // import { useState } from 'react'
-import Header from '../../Components/Header'
-import MainSection from '../../Components/mainsection'
-import Footer from '../../Components/Footer'
+import Header from '../../Components_test/Header'
+import MainSection from '../../Components_test/mainsection_temp'
+import Footer from '../../Components_test/Footer'
 import  "../LandingPage/LandingPagestyle.css"
 
 

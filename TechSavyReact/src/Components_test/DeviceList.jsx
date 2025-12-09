@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaFilter, FaTimes } from "react-icons/fa";
-import DeviceCard from "../Components/DeviceCard";
+import DeviceCard from "./DeviceCard";
 import "../componentStyle/DeviceListstyle.css"; // Import your CSS file for styling
 import {useLoader} from "../assets/LoaderContext";
-import {getData,postData} from "../Components/ApiService";
+import {getData,postData} from "./ApiService";
 
 function DeviceList() {
   const navigate = useNavigate();

@@ -1,10 +1,10 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import Modal from "../Components/modal";
+import Modal from "./modal";
 import { use, useContext, useState } from "react";
-import Login from "../Components/login";
-import Signup from "../Components/signup";
-import ForgotPassword from "../Components/ForgotPassword";
-import AccountList from "../Components/AccountList";
+import Login from "./login";
+import Signup from "./signup";
+import ForgotPassword from "./ForgotPassword";
+import AccountList from "./AccountList";
 import { AuthContext } from "../assets/AuthContext";
 import { useCart } from "../assets/CartContext";
 import { FaUser, FaBars, FaTimes } from "react-icons/fa";

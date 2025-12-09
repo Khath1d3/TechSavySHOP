@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Header2 from "../../Components/Header2";
-import Footer from "../../Components/Footer";
+import Header2 from "../../Components_test/Header2";
+import Footer from "../../Components_test/Footer";
 import "./AboutUsStyle.css";
 
 function AboutUs() {
