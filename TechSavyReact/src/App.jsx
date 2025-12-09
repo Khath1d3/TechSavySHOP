@@ -7,13 +7,13 @@ import ViewItemPage from './Pages/ViewItemPage/ViewItemPage.jsx'
 import ReviewOrderPage from './Pages/ReviewOrderPage/ReviewOrderPage.jsx'
 import AboutUs from './Pages/AboutUsPage/AboutUs.jsx'
 import CustomerCare from './Pages/CustomerCarePage/CustomerCare.jsx'
-import Scrolltotop from './Components_test/scrolltotop.js'
+import Scrolltotop from './Components/scrolltotop.js'
 import Account from './Pages/Account/Account.jsx'
 import React, { useEffect, useState } from "react";
-import Loader from "./Components_test/loader.js";
-import Header from './Components_test/Header.jsx'
-import Header2 from './Components_test/Header2.jsx'
-import TokenWatcher from "./Components_test/TokenWatcher.jsx";
+import Loader from "./Components/loader.js";
+import Header from './Components/Header.jsx'
+import Header2 from './Components/Header2.jsx'
+import TokenWatcher from "./Components/TokenWatcher.jsx";
 
 
 function App() {

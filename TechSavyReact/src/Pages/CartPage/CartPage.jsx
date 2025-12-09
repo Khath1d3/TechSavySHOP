@@ -1,11 +1,11 @@
 import React ,{useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
-import Header2 from "../../Components_test/Header2";
-import Footer from "../../Components_test/Footer";
-import CartItem from "../../Components_test/CartItem";
+import Header2 from "../../Components/Header2";
+import Footer from "../../Components/Footer";
+import CartItem from "../../Components/CartItem";
 import "./CartitemStyle.css";
 import {useLoader} from "../../assets/LoaderContext";
-import {getData} from "../../Components_test/ApiService";
+import {getData} from "../../Components/ApiService";
 
 function CartPage() {
     const navigate = useNavigate();

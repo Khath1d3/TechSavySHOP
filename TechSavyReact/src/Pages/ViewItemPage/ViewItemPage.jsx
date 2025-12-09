@@ -1,13 +1,13 @@
 import React,{useState,useEffect} from "react";
-import Header2 from "../../Components_test/Header2";
-import Footer from "../../Components_test/Footer";
-import Modal from "../../Components_test/modal";
+import Header2 from "../../Components/Header2";
+import Footer from "../../Components/Footer";
+import Modal from "../../Components/modal";
 import { useParams } from "react-router-dom";
 import "./ViewItemStyle.css";
-import DeviceCard from "../../Components_test/DeviceCard";
+import DeviceCard from "../../Components/DeviceCard";
 import {useLoader} from "../../assets/LoaderContext";
 import { useCart } from "../../assets/CartContext";
-import { getData, postData } from "../../Components_test/ApiService";
+import { getData, postData } from "../../Components/ApiService";
 
 
 function ViewItemPage() {
