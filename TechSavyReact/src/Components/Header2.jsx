@@ -51,7 +51,7 @@ const handleAccountHover = (show) => {
       <header className="shared-header">
         <div className="shared-header-top">
             <div className="shared-logo">
-               <Link to="/"> <img src="images/logo2.png" alt="Tech Savy Shop Logo" /></Link>
+               <Link to="/"> <img src="/images/logo2.png" alt="Tech Savy Shop Logo" /></Link>
             </div>
 
             {/* Hamburger Menu Icon */}
@@ -80,7 +80,7 @@ const handleAccountHover = (show) => {
                         {location.pathname === "/Cart" ? (
                             <a className="shared-nav-link active">
                                 <span className="shared-cart-link">
-                                    <img src="images/cart.png" alt="Cart" className="shared-cart-icon" />
+                                    <img src="/images/cart.png" alt="Cart" className="shared-cart-icon" />
                                     {isLoggedIn && cartCount > 0 && <span className="shared-cart-count">{cartCount}</span>}
                                 </span>
                                 Cart
@@ -88,7 +88,7 @@ const handleAccountHover = (show) => {
                         ) : (
                             <ProtectedLink className="shared-item" to="/Cart">
                                 <span className="shared-cart-link">
-                                    <img src="images/cart.png" alt="Cart" className="shared-cart-icon" />
+                                    <img src="/images/cart.png" alt="Cart" className="shared-cart-icon" />
                                     {isLoggedIn && cartCount > 0 && <span className="shared-cart-count">{cartCount}</span>}
                                 </span>
                                 Cart

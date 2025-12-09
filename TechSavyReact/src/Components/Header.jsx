@@ -44,7 +44,7 @@ const handleAccountHover = (show) => {
     <>
     <header className="landing-header">
     <div className="landing-header-top">
-        <div className="landing-logo"><img src="img/logo.png" alt=""></img></div>
+        <div className="landing-logo"><img src="/images/logo.png" alt=""></img></div>
         
     
         {/* Hamburger Menu Icon */}
@@ -65,7 +65,7 @@ const handleAccountHover = (show) => {
                         {location.pathname === "/Cart" ? (
                             <a className="landing-nav-link active">
                                 <span className="landing-cart-link">
-                                    <img src="images/cart.png" alt="Cart" className="landing-cart-icon" />
+                                    <img src="/images/cart.png" alt="Cart" className="landing-cart-icon" />
                                     {isLoggedIn && cartCount > 0 && <span className="landing-cart-count">{cartCount}</span>}
                                 </span>
                                 Cart
@@ -73,14 +73,14 @@ const handleAccountHover = (show) => {
                         ) : (
                             <ProtectedLink className="landing-item" to="/Cart">
                                 <span className="landing-cart-link">
-                                    <img src="images/cart.png" alt="Cart" className="landing-cart-icon" />
+                                    <img src="/images/cart.png" alt="Cart" className="landing-cart-icon" />
                                     {isLoggedIn && cartCount > 0 && <span className="landing-cart-count">{cartCount}</span>}
                                 </span>
                                 Cart
                             </ProtectedLink>
                         )}
                     </li>
-              {isLoggedIn ? (
+                    {isLoggedIn ? (
                         <>
                             <li onClick={logout}>
                                 <a className="landing-item landing-logoutbtn">Logout</a>
@@ -89,20 +89,21 @@ const handleAccountHover = (show) => {
                                 <FaUser className="icon"/>
                                 <span>{userData.firstName}</span>
                             </li>
-                            </>
-                        ) : (
-                            <>
+                        </>
+                    ) : (
+                        <>
                             <li onClick={() => {setIsSignupModalOpen(true); closeMobileMenu();}}>
                                 <a className="landing-item" id="signupBtn">Sign Up</a>
                             </li>
                             <li onClick={() => {setIsLoginModalOpen(true); closeMobileMenu();}}>
                                 <a className="landing-item" id="loginBtn">Login</a>
                             </li>
-                            </>
+                        </>
                     )}
             </ul>
         </nav>
     </div>
+    </header>
     
     {/* Modals */}
     <Modal isOpen={isSignupModalOpen} onClose={() => setIsSignupModalOpen(false)}>
@@ -130,7 +131,6 @@ const handleAccountHover = (show) => {
             setIsLoginModalOpen(true);
         }} />
     </Modal>
-    </header>
     </>
  )
 }
