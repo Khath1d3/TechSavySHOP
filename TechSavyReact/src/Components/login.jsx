@@ -40,8 +40,10 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
     showLoader();
     try {
       const response = await postData("Login", formData);
+      console.log("Login response:", response);
       if (response.success) {
         const data = await response;
+        console.log("Login data received:", { hasToken: !!data.token, tokenLength: data.token?.length });
         await login(data.token);  
         if (typeof onSuccess === "function") onSuccess();
         if(redirectPath && redirectPath !== "/"){
