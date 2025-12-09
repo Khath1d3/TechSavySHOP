@@ -5,7 +5,7 @@ import App from './App.jsx'
 import { AuthProvider } from './assets/AuthContext.jsx'
 import { LoaderProvider } from './assets/LoaderContext.jsx'
 import { CartProvider } from './assets/CartContext.jsx'
-import GlobalLoader from './Components/GlobalLoader.js'
+import GlobalLoader from './Components/GlobalLoader.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
