@@ -1,0 +1,172 @@
+/* About Us Page Styles */
+.aboutus-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    padding-top: 15vh;
+    min-height: 70vh;
+}
+
+.aboutus-title {
+    font-size: 2.5rem;
+    color: #333;
+    text-align: center;
+    margin-bottom: 40px;
+    font-weight: 700;
+}
+
+.aboutus-section {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    scroll-margin-top: 15vh;
+}
+
+.aboutus-section h2 {
+    font-size: 1.8rem;
+    color: green;
+    margin-bottom: 20px;
+    font-weight: 600;
+    border-bottom: 3px solid green;
+    padding-bottom: 10px;
+}
+
+.aboutus-section h4 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-top: 20px;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.aboutus-section p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 16px;
+}
+
+.aboutus-section ul {
+    list-style: disc;
+    margin-left: 30px;
+    margin-bottom: 16px;
+}
+
+.aboutus-section ul li {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+/* Press Section */
+.press-highlights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin: 24px 0;
+}
+
+.press-item {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid green;
+}
+
+.press-item h4 {
+    font-size: 1rem;
+    color: green;
+    margin-bottom: 8px;
+    margin-top: 0;
+}
+
+.press-item p {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 0;
+    font-style: italic;
+}
+
+/* Careers Section */
+.careers-benefits {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.careers-benefits h4 {
+    margin-top: 0;
+    color: green;
+}
+
+/* Terms Update Note */
+.terms-update {
+    font-size: 0.9rem;
+    color: #999;
+    font-style: italic;
+    margin-top: 30px;
+    text-align: right;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+    .aboutus-container {
+        padding-top: 14vh;
+    }
+
+    .aboutus-title {
+        font-size: 2rem;
+    }
+
+    .aboutus-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .aboutus-section {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 640px) {
+    .aboutus-container {
+        padding: 20px 15px;
+        padding-top: 14vh;
+    }
+
+    .aboutus-title {
+        font-size: 1.6rem;
+        margin-bottom: 30px;
+    }
+
+    .aboutus-section {
+        padding: 20px 15px;
+        margin-bottom: 20px;
+    }
+
+    .aboutus-section h2 {
+        font-size: 1.3rem;
+    }
+
+    .aboutus-section h4 {
+        font-size: 1.1rem;
+    }
+
+    .aboutus-section p,
+    .aboutus-section ul li {
+        font-size: 0.95rem;
+    }
+
+    .press-highlights {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .aboutus-section ul {
+        margin-left: 20px;
+    }
+}

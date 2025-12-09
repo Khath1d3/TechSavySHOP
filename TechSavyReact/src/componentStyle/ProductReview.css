@@ -1,0 +1,162 @@
+.review-container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 6px;
+    max-width: 800px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .dropdown select {
+    padding: 6px 10px;
+    border-radius: 4px;
+    outline: none;
+  }
+  .dropdown select:focus {
+    border: 1px solid green;
+  }
+  
+  .tabs {
+    display: flex;
+    margin-top: 20px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .tabs button {
+    padding: 10px 16px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .tabs button.active {
+    border-bottom: 2px solid #0073e6;
+    color: #0073e6;
+  }
+  
+  .tab-content {
+    margin-top: 20px;
+  }
+  
+  .review-item {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 1px solid green;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+  }
+  
+  .review-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-right: 16px;
+  }
+  
+  .review-item .info {
+    flex: 1;
+  }
+  
+  .review-btn {
+    padding: 8px 16px;
+    border: 1px solid green;
+    background: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+  
+  .review-btn:hover {
+    background-color: green;
+    color: white;
+  }
+  
+  .note {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+    display: flex;
+    align-items: center;
+  }
+  
+  .info-icon {
+    margin-right: 8px;
+  }
+
+  /* Responsive Design */
+  @media screen and (max-width: 968px) {
+    .review-container {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .tabs {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .review-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .review-item img {
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+        margin-bottom: 12px;
+    }
+
+    .review-btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    .review-container {
+        padding: 10px;
+    }
+
+    .tabs button {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    .review-item {
+        padding: 10px;
+    }
+
+    .review-item img {
+        max-width: 150px;
+    }
+
+    /* Hide images on mobile for reviews */
+    .review-item img {
+        display: none;
+    }
+
+    .dropdown select {
+        width: 100%;
+    }
+
+    .note {
+        font-size: 12px;
+    }
+  }
+  

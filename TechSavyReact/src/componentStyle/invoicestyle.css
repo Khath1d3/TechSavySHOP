@@ -1,0 +1,418 @@
+.invoice-section {
+       padding: 20px;
+    /* background-color: #f7f7f7; */
+    overflow: auto;
+    height: 73vh;
+  }
+  
+  .invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .invoice-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .invoice-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .invoice-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .invoice-card {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid green;
+    line-height: normal;
+  }
+  
+  .invoice-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .order-number {
+    margin: 0;
+    font-weight: bold;
+  }
+  
+  .view-invoice-btn {
+    padding: 6px 14px;
+    background-color: green;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+    width: 10vw;
+  }
+  
+  .view-invoice-btn:hover {
+    background-color: darkgreen;
+  }
+  
+  .invoice-image img {
+    max-width: 80px;
+    max-height: 80px;
+    object-fit: contain;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  #year{
+    width: 100px;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-left: 10px;
+  }
+
+  /* Order Card Specific Styles */
+  .order-card {
+    align-items: stretch;
+  }
+
+  .order-info {
+    flex: 1;
+  }
+
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .order-status {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+
+  .status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+
+  .status-processing {
+    background-color: #cfe2ff;
+    color: #084298;
+  }
+
+  .status-shipped {
+    background-color: #d1ecf1;
+    color: #0c5460;
+  }
+
+  .status-delivered {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  .status-cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  .order-date {
+    margin: 4px 0;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .order-total {
+    margin: 4px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: green;
+  }
+
+  .order-products-preview {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .order-product-image {
+    width: 80px;
+    height: 80px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .order-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .order-product-more {
+    width: 80px;
+    height: 80px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .order-remaining-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  /* Order Details Modal */
+  .order-details-modal {
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .order-details-modal h2 {
+    margin: 0 0 20px 0;
+    font-size: 24px;
+    color: #333;
+  }
+
+  .order-detail-section {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .order-detail-section:last-of-type {
+    border-bottom: none;
+  }
+
+  .order-detail-section h3 {
+    margin: 0 0 12px 0;
+    font-size: 16px;
+    color: green;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .order-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .detail-item strong {
+    font-size: 12px;
+    color: #666;
+    text-transform: uppercase;
+  }
+
+  .detail-item span {
+    font-size: 14px;
+    color: #333;
+  }
+
+  .address-info p {
+    margin: 4px 0;
+    line-height: 1.5;
+  }
+
+  .order-products-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .order-product-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+  }
+
+  .order-product-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  .product-item-info {
+    flex: 1;
+  }
+
+  .product-name {
+    margin: 0 0 4px 0;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .product-price {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: green;
+  }
+
+  .close-modal-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+
+  .close-modal-btn:hover {
+    background-color: darkgreen;
+  }
+
+  .no-orders,
+  .error-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+    font-size: 16px;
+  }
+
+  .error-message {
+    color: #d32f2f;
+  }
+
+  /* Responsive Design */
+  @media screen and (max-width: 968px) {
+    .invoice-section {
+        padding: 15px;
+    }
+
+    .invoice-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .invoice-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .invoice-image {
+        width: 100%;
+        text-align: center;
+    }
+
+    .invoice-image img {
+        max-width: 150px;
+        max-height: 150px;
+    }
+
+    .view-invoice-btn {
+        width: 100%;
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    .invoice-section {
+        padding: 10px;
+        height: auto;
+    }
+
+    .invoice-header h2 {
+        font-size: 18px;
+    }
+
+    .invoice-filter {
+        flex-direction: column;
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    #year {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 5px;
+    }
+
+    .invoice-card {
+        padding: 12px;
+    }
+
+    .invoice-details {
+        width: 100%;
+    }
+
+    .order-number {
+        font-size: 14px;
+    }
+
+    /* Hide images on mobile for invoices */
+    .invoice-image {
+        display: none;
+    }
+
+    /* Keep order product images visible on mobile but smaller */
+    .order-products-preview {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .order-product-image,
+    .order-product-more {
+        width: 60px;
+        height: 60px;
+    }
+
+    .order-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .order-details-modal {
+        max-height: 90vh;
+    }
+
+    .order-product-item img {
+        width: 50px;
+        height: 50px;
+    }
+  }

@@ -1,0 +1,73 @@
+.personal-details__form{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+.personal-details__input{
+    width: 15em;
+    padding: .5em;
+    outline: none;
+}
+.personal-details__input:focus{
+    border: 1px solid green;
+    box-shadow: 0 0 5px rgba(0, 128, 0, 0.5);
+}
+.personal-details__label{
+    width: 20em;
+    display: inline-block;
+}
+.personal-details__form-group{
+    border-bottom: .5px solid #f0eaea;
+    padding: 10px 0;
+}
+.personal-details__button{
+    padding: 10px 20px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: fit-content;
+    transition: all 0.3s ease;
+
+}
+.personal-details__button:hover{
+    background-color: #005700;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 87, 0, 0.3);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 968px) {
+    .personal-details__form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .personal-details__label {
+        width: 100%;
+    }
+
+    .personal-details__input {
+        width: 100%;
+        max-width: 400px;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .personal-details__form {
+        padding: 10px;
+    }
+
+    .personal-details__input {
+        width: 100%;
+        max-width: 100%;
+        padding: 0.7em;
+    }
+
+    .personal-details__button {
+        width: 100%;
+        padding: 12px 20px;
+    }
+}
