@@ -7,10 +7,10 @@ import ViewItemPage from './Pages/ViewItemPage/ViewItemPage.jsx'
 import ReviewOrderPage from './Pages/ReviewOrderPage/ReviewOrderPage.jsx'
 import AboutUs from './Pages/AboutUsPage/AboutUs.jsx'
 import CustomerCare from './Pages/CustomerCarePage/CustomerCare.jsx'
-import Scrolltotop from './Components/scrolltotop.js'
+import Scrolltotop from './Components/scrolltotop.jsx'
 import Account from './Pages/Account/Account.jsx'
 import React, { useEffect, useState } from "react";
-import Loader from "./Components/loader.js";
+import Loader from "./Components/loader.jsx";
 import Header from './Components/Header.jsx'
 import Header2 from './Components/Header2.jsx'
 import TokenWatcher from "./Components/TokenWatcher.jsx";
