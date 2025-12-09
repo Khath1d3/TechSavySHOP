@@ -1,7 +1,7 @@
 import React from 'react'
 // import { useState } from 'react'
 import Header from '../../Components/Header'
-import MainSection from '../../components/mainsection'
+import MainSection from '../../Components/mainsection.jsx'
 import Footer from '../../Components/Footer'
 import  "../LandingPage/LandingPagestyle.css"
 
