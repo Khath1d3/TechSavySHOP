@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"; 
 import React, { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import { getData } from '../Components/ApiService';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -39,17 +40,11 @@ export const AuthProvider = ({ children }) => {
 
 const fetchUserData = async (token) => {
     try {
-        const response = await fetch("https://localhost:7272/api/TechSavy/me", {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        });
-
-        if (response.ok) {
-            const data = await response.json();
+        const response = await getData("me");
+        if (response.success) {
             setUserData({ 
-                firstName: data.firstName, 
-                lastName: data.lastName 
+                firstName: response.data.firstName, 
+                lastName: response.data.lastName 
             });
         } else {
             logout();

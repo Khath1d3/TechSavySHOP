@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { postData } from "./ApiService";
 
 function Signup({ onSwitchToLogin }) {
  const [formData, setFormData] = useState({
@@ -41,24 +42,20 @@ function Signup({ onSwitchToLogin }) {
       return;
     }
 
-    const requestData = { ...formData };
-    delete requestData.confirmPassword;
+    const requestData = { ...formData };
+    delete requestData.confirmPassword;
 
-    const response = await fetch("https://localhost:7272/api/TechSavy/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(requestData),
-    });
-
-    if (response.ok) {
-      setMessage("Registration successful!");
-    } else {
-      const err = await response.json();
-      setMessage(`Error: ${err.message || "Registration failed"}`);
-    }
-  };
-
-return (
+    try {
+      const response = await postData("register", requestData);
+      if (response.success) {
+        setMessage("Registration successful!");
+      } else {
+        setMessage(`Error: ${response.message || "Registration failed"}`);
+      }
+    } catch (error) {
+      setMessage(`Error: ${error.message || "Registration failed"}`);
+    }
+  };return (
     <>
         <h2>Sign Up</h2>
         <form id="signupForm" onSubmit={handleSubmit}>
