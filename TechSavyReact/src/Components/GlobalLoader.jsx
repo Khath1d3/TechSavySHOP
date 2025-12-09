@@ -8,7 +8,7 @@ const GlobalLoader = () => {
   return loading ? (
     <div className="global-loader">
       <div className="spinner" />
-\    </div>
+    </div>
   ) : null;
 };
 

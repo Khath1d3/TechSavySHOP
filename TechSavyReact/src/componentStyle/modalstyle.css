@@ -19,6 +19,8 @@
     text-align: center;
     width: 90%;
     max-width: 450px;
+    max-height: 90vh;
+    overflow-y: auto;
     position: relative;
 }
     
@@ -290,6 +292,7 @@
     .popup-content {
         width: 95%;
         max-width: 95%;
+        max-height: 95vh;
         padding: 15px;
     }
 
