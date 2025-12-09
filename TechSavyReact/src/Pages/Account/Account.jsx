@@ -5,11 +5,11 @@ import Header2 from "../../Components/Header2";
 import Footer from "../../Components/Footer";
 import './AccountStyle.css'
 import Invoices from "../../Components/invoices"
-import Orders from "../../Components/orders"
-import Reviews from "../../Components/reviews"
+import Orders from "../../Components/Orders"
+import Reviews from "../../Components/Reviews"
 import PersonalDetails from "../../Components/personalDetails"
-import AddressBook from "../../Components/addressBook"
-import SecuritySettings from "../../Components/securitySettings"
+import AddressBook from "../../Components/AddressBook"
+import SecuritySettings from "../../Components/SecuritySettings"
 
 function Account() {
 
