@@ -6,7 +6,7 @@ import Footer from "../../Components/Footer";
 import './AccountStyle.css'
 import Invoices from "../../Components/invoices"
 import Orders from "../../Components/orders"
-import Reviews from "../../Components/Reviews"
+import Reviews from "../../Components/reviews"
 import PersonalDetails from "../../Components/personalDetails"
 import AddressBook from "../../Components/AddressBook"
 import SecuritySettings from "../../Components/SecuritySettings"
