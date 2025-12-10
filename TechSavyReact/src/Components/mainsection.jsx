@@ -60,18 +60,18 @@ function MainSection() {
                         .slice(0, 3);
                     
                     console.log("Recent products:", recentItems);
-                    setRecentProducts(recentItems.length > 0 ? recentItems : getRandomProducts(products, 3));
+                    setRecentProducts(recentItems.length > 0 ? recentItems : getRandomProducts(products, 4));
                 } else {
                     // If no recent views, use random products
-                    setRecentProducts(getRandomProducts(products, 3));
+                    setRecentProducts(getRandomProducts(products, 4));
                 }
 
                 // Set random products for Featured and Top Rated
-                setFeaturedProducts(getRandomProducts(products, 3));
-                setTopRatedProducts(getRandomProducts(products, 3));
+                setFeaturedProducts(getRandomProducts(products, 4));
+                setTopRatedProducts(getRandomProducts(products, 4));
 
                 // Set sale products for the Sale tab
-                setSaleProducts(getRandomProducts(onSaleProducts, 3));
+                setSaleProducts(getRandomProducts(onSaleProducts, 4));
 
             } catch (error) {
                 console.error("Error fetching products:", error);

@@ -48,6 +48,24 @@ header.shared-header {
     font-weight: bold;
 }
 
+/* User Greeting Styles */
+.shared-user-greeting-desktop {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 600;
+    color: green;
+    margin-left: auto;
+    padding: 8px 16px;
+    background-color: #f0f8f0;
+    border-radius: 20px;
+    border: 1px solid #d4edda;
+}
+
+.shared-user-greeting-mobile {
+    display: none;
+}
+
 .shared-logo img {
     padding-top: 0.5em;
     height: 10vh;
@@ -209,6 +227,28 @@ header.shared-header {
     .shared-hamburger-menu {
         display: block;
     }
+    .shared-header {
+        padding: 0 !important;
+    }
+    .shared-header-top {
+        padding: 0 5px!important;
+    }
+    .shared-user-greeting-desktop {
+        display: none !important;
+    }
+
+    .shared-user-greeting-mobile {
+        display: flex;
+        align-items: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: green;
+        padding: 6px 12px;
+        background-color: #f0f8f0;
+        border-radius: 15px;
+        border: 1px solid #d4edda;
+        text-align: center;
+    }
 
     .shared-user-info-desktop {
         display: flex !important;
@@ -231,7 +271,6 @@ header.shared-header {
         box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
         z-index: 1050;
         overflow-y: auto;
-        padding-top: 80px;
     }
 
     .shared-nav-menu.active {
@@ -242,7 +281,7 @@ header.shared-header {
         flex-direction: column;
         gap: 0;
         width: 100%;
-        padding: 20px 0;
+        padding:0;
         display: flex;
         flex: 1;
         height: 100%;
@@ -253,12 +292,13 @@ header.shared-header {
         margin: 0;
         border-bottom: 1px solid #e0e0e0;
         display: block;
+        padding-left: 10px;
     }
 
     .shared-nav-links .shared-item,
     .shared-nav-links .shared-nav-link {
         display: block;
-        padding: 15px 25px;
+        padding: 15px 0px;
         width: 100%;
         box-sizing: border-box;
         color: #333 !important;
@@ -294,11 +334,11 @@ header.shared-header {
     .shared-accountInfo.show {
         height: auto;
         border: none;
-        padding: 10px 0 10px 20px;
+        padding: 10px 0 10px 0px;
     }
 
     .shared-accountInfo li {
-        padding: 10px 25px;
+        padding: 10px 0px;
         border-bottom: 1px solid #e0e0e0;
     }
 
@@ -306,7 +346,7 @@ header.shared-header {
         display: flex !important;
         align-items: center;
         gap: .5em;
-        padding: 15px 25px;
+        padding: 15px 0px;
         border-left: none;
         margin-top: auto;
         background-color: #f0f0f0;

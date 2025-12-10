@@ -306,13 +306,13 @@
 .product-filter-toggle-btn {
     display: none;
     position: fixed;
-    top: 120px;
-    right: 20px;
+    top: 100px;
+    right: 0;
     z-index: 999;
     background-color: green;
     color: white;
     border: none;
-    border-radius: 50px;
+    border-radius: 50px 0 0 50px;
     padding: 12px 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     cursor: pointer;
@@ -422,6 +422,7 @@
         box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
         padding: 20px;
         margin-bottom: 0;
+        padding-top: 15vh!important;
     }
 
     .product-filters.product-filter-open {
@@ -565,8 +566,6 @@
 
     .product-filters {
         padding: 12px;
-        padding-top: 15vh!important;
-
     }
 
     .product-filters h3 {

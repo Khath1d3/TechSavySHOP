@@ -54,6 +54,13 @@ const handleAccountHover = (show) => {
                <Link to="/"> <img src="/images/logo2.png" alt="Tech Savy Shop Logo" /></Link>
             </div>
 
+            {/* User Greeting - Mobile */}
+            {isLoggedIn && (
+                <div className="shared-user-greeting-mobile">
+                    <span>Hello {userData.firstName}</span>
+                </div>
+            )}
+
             {/* Hamburger Menu Icon */}
             <div className="shared-hamburger-menu" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
                 {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
@@ -118,6 +125,13 @@ const handleAccountHover = (show) => {
                     )}
                 </ul>
             </nav>
+
+            {/* User Greeting - Desktop */}
+            {isLoggedIn && (
+                <div className="shared-user-greeting-desktop">
+                    <span>Hello {userData.firstName}</span>
+                </div>
+            )}
         </div>
 
         {/* Modals */}

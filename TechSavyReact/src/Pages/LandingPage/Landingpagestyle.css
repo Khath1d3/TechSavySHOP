@@ -41,6 +41,24 @@ header.landing-header {
     height: 12vh;
 }
 
+/* User Greeting Styles */
+.landing-user-greeting-desktop {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 600;
+    color: green;
+    margin-left: auto;
+    padding: 8px 16px;
+    background-color: #f0f8f0;
+    border-radius: 20px;
+    border: 1px solid #d4edda;
+}
+
+.landing-user-greeting-mobile {
+    display: none;
+}
+
 nav {
     display: flex;
     justify-content: flex-end;
@@ -552,6 +570,22 @@ footer {
         padding: 15px 20px;
     }
 
+    .landing-user-greeting-desktop {
+        display: none !important;
+    }
+
+    .landing-user-greeting-mobile {
+        display: flex;
+        align-items: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: green;
+        padding: 6px 12px;
+        background-color: #f0f8f0;
+        border-radius: 15px;
+        border: 1px solid #d4edda;
+    }
+
     .landing-logo img {
         height: 8vh;
     }
@@ -612,7 +646,7 @@ footer {
         box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
         z-index: 1050;
         overflow-y: auto;
-        padding-top: 80px;
+        padding-top: 20px;
         display: flex;
     }
 

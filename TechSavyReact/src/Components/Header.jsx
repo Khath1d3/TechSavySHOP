@@ -46,6 +46,12 @@ const handleAccountHover = (show) => {
     <div className="landing-header-top">
         <div className="landing-logo"><img src="/images/logo.png" alt=""></img></div>
         
+        {/* User Greeting - Mobile */}
+        {isLoggedIn && (
+            <div className="landing-user-greeting-mobile">
+                <span>Hello {userData.firstName}</span>
+            </div>
+        )}
     
         {/* Hamburger Menu Icon */}
         <div className="landing-hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -102,6 +108,13 @@ const handleAccountHover = (show) => {
                     )}
             </ul>
         </nav>
+
+        {/* User Greeting - Desktop */}
+        {isLoggedIn && (
+            <div className="landing-user-greeting-desktop">
+                <span>Hello {userData.firstName}</span>
+            </div>
+        )}
     </div>
     </header>
     
