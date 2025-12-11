@@ -27,12 +27,10 @@ header.shared-header {
     color: black;
     padding: 10px 20px;
     height: 12vh;
-    position: fixed;
+    position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
     background-color: white;
-    z-index: 1000;
+    z-index: 100;
     border-bottom: 1px solid black;
 }
 
@@ -41,34 +39,17 @@ header.shared-header {
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    position: relative;
 }
 
 .shared-logo {
     font-size: 1.5rem;
     font-weight: bold;
-}
-
-/* User Greeting Styles */
-.shared-user-greeting-desktop {
-    display: flex;
-    align-items: center;
-    font-size: 1rem;
-    font-weight: 600;
-    color: green;
-    margin-left: auto;
-    padding: 8px 16px;
-    background-color: #f0f8f0;
-    border-radius: 20px;
-    border: 1px solid #d4edda;
-}
-
-.shared-user-greeting-mobile {
-    display: none;
+    flex: 0 0 auto;
 }
 
 .shared-logo img {
-    padding-top: 0.5em;
-    height: 10vh;
+    height: 12vh;
 }
 
 .shared-nav-links {

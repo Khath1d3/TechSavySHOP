@@ -1,7 +1,6 @@
 .view-item-container{
     display: flex;
     padding: 20px;
-    padding-top: 15vh;
     gap: 5em;
     border-bottom: 1px solid #ccc;
     margin-bottom: 20px;
@@ -42,6 +41,41 @@
 }
 .viewitem-remove-from-cart-btn:hover{
   background-color: #c82333;
+}
+
+.add-to-cart-success {
+    margin-top: 15px;
+    background-color: #28a745;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+    animation: slideInBounce 2s ease-out forwards;
+}
+
+@keyframes slideInBounce {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.8);
+    }
+    20% {
+        opacity: 1;
+        transform: translateY(0) scale(1.05);
+    }
+    30% {
+        transform: translateY(0) scale(1);
+    }
+    80% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
 }
 .similar-products{
   display: grid;
@@ -95,7 +129,6 @@
     flex-direction: column;
     gap: 2em;
     padding: 15px;
-    padding-top: 15vh!important;
   }
 
   .img-container {
@@ -164,12 +197,23 @@
   max-width: 700px;
   width: 100%;
   max-height: 80vh;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.viewitem-reviews-modal .modal-header-fixed {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 10;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e0e0e0;
 }
 
 .viewitem-reviews-modal h2 {
   color: #333;
   margin-bottom: 20px;
+  margin-top: 0;
   font-size: 1.8rem;
   border-bottom: 2px solid green;
   padding-bottom: 10px;
@@ -179,7 +223,7 @@
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
   padding: 15px;
   background-color: #f8f9fa;
   border-radius: 8px;
@@ -211,6 +255,10 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 5px;
+  padding-top: 10px;
 }
 
 .viewitem-review-card {

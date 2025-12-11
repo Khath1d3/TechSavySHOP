@@ -1,6 +1,6 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Modal from "./modal";
-import { use, useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import Login from "./login";
 import Signup from "./signup";
 import ForgotPassword from "./ForgotPassword";
@@ -11,7 +11,7 @@ import { FaUser, FaBars, FaTimes } from "react-icons/fa";
 import {useLoader} from "../assets/LoaderContext";
 import ProtectedLink from "../assets/ProtectedLink";
 
-function Header(){
+function Header({ isLandingPage = false }){
 const {isLoggedIn,logout,userData}=useContext(AuthContext);
 const { cartCount } = useCart();
 const [isLoginModalOpen, setIsLoginModalOpen] =useState(false);
@@ -20,6 +20,8 @@ const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] = useState(false
 const [showaccountList, setShowAccountList] = useState(false);
 const [isMenuOpen, setIsMenuOpen] = useState(false);
 const [isMobile, setIsMobile] = useState(window.innerWidth <= 968);
+const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+const [logoutCountdown, setLogoutCountdown] = useState(2);
 const location = useLocation();
 const navigate = useNavigate();
 
@@ -39,12 +41,54 @@ const handleAccountHover = (show) => {
     }
 }
 
+const handleLogOut = () => {
+    setIsLogoutModalOpen(true);
+    setLogoutCountdown(2);
+    setIsMenuOpen(false);
+}
+
+const confirmLogout = () => {
+    logout();
+    navigate("/"); 
+    setIsLogoutModalOpen(false);
+}
+
+const cancelLogout = () => {
+    setIsLogoutModalOpen(false);
+    setLogoutCountdown(2);
+}
+
+useEffect(() => {
+    let timer;
+    if (isLogoutModalOpen && logoutCountdown > 0) {
+        timer = setTimeout(() => {
+            setLogoutCountdown(logoutCountdown - 1);
+        }, 1000);
+    } else if (isLogoutModalOpen && logoutCountdown === 0) {
+        confirmLogout();
+    }
+    return () => clearTimeout(timer);
+}, [isLogoutModalOpen, logoutCountdown]);
 
  return(
     <>
+    {/* Mobile Menu Overlay */}
+    {isMenuOpen && (
+        <div 
+            className="landing-mobile-overlay" 
+            onClick={closeMobileMenu}
+        />
+    )}
+    
     <header className="landing-header">
     <div className="landing-header-top">
-        <div className="landing-logo"><img src="/images/logo.png" alt=""></img></div>
+        <div className="landing-logo">
+            {isLandingPage ? (
+                <img src="/images/logo.png" alt="Tech Savy Shop Logo" />
+            ) : (
+                <Link to="/"><img src="/images/logo2.png" alt="Tech Savy Shop Logo" /></Link>
+            )}
+        </div>
         
         {/* User Greeting - Mobile */}
         {isLoggedIn && (
@@ -88,7 +132,7 @@ const handleAccountHover = (show) => {
                     </li>
                     {isLoggedIn ? (
                         <>
-                            <li onClick={logout}>
+                            <li onClick={handleLogOut}>
                                 <a className="landing-item landing-logoutbtn">Logout</a>
                             </li>
                             <li className="landing-user-info-mobile">
@@ -143,6 +187,16 @@ const handleAccountHover = (show) => {
             setIsForgotPasswordModalOpen(false);
             setIsLoginModalOpen(true);
         }} />
+    </Modal>
+    <Modal isOpen={isLogoutModalOpen} onClose={cancelLogout}>
+        <div className="logout-confirmation">
+            <h2>Logging out...</h2>
+            <p>You will be logged out in {logoutCountdown} seconds</p>
+            <div className="logout-actions">
+                <button className="logout-cancel-btn" onClick={cancelLogout}>Cancel</button>
+                <button className="logout-confirm-btn" onClick={confirmLogout}>Logout Now</button>
+            </div>
+        </div>
     </Modal>
     </>
  )

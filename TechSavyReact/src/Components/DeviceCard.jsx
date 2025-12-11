@@ -14,6 +14,7 @@ function DeviceCard({ id, name, category, price, originalPrice, imageURL, rating
     const { updateCartCount } = useCart();
     const [loading, setLoading] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
+    const [addedToCart, setAddedToCart] = useState(false);
     
     const handleClick = () => {
       addToRecentlyViewed(id);
@@ -38,6 +39,8 @@ function DeviceCard({ id, name, category, price, originalPrice, imageURL, rating
             await postData('AddToCart', productId);
             console.log('Added to cart successfully');
             updateCartCount(); // Update cart count after adding
+            setAddedToCart(true);
+            setTimeout(() => setAddedToCart(false), 2000); // Hide after 2 seconds
         } catch (error) {
             console.error('Error adding to cart:', error);
         }
@@ -100,6 +103,11 @@ function DeviceCard({ id, name, category, price, originalPrice, imageURL, rating
                 >
                     {loading ? 'Adding...' : 'Add to Cart'}
                 </button>
+                {addedToCart && (
+                    <div className="add-to-cart-success">
+                        ✓ Added!
+                    </div>
+                )}
             </div>
 
             {/* Render modal using portal to document.body */}

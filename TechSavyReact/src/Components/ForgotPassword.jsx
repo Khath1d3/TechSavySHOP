@@ -1,39 +1,57 @@
 import React, { useState } from "react";
 import { postData } from "./ApiService";
+import { validateEmail } from "../utils/validation";
+import { showSuccessToast, showErrorToast } from "../utils/toast";
 
 function ForgotPassword({ onBack }) {
     const [email, setEmail] = useState("");
+    const [error, setError] = useState("");
     const [message, setMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value);
+        if (error) {
+            setError("");
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        if (!email) {
-            setMessage("Please enter your email address");
-            setIsSuccess(false);
+        // Validate email
+        const emailValidation = validateEmail(email);
+        if (!emailValidation.isValid) {
+            setError(emailValidation.error);
+            showErrorToast(emailValidation.error);
             return;
         }
 
         setIsLoading(true);
         setMessage("");
+        setError("");
 
         try {
-            // Replace with your actual API endpoint
             const response = await postData("ForgotPassword", { email });
             
             if (response.success) {
-                setMessage("If an account exists with this email, a new password will be sent. Please check your email and change it after logging in.");
+                const successMsg = "If an account exists with this email, a new password will be sent. Please check your email and change it after logging in.";
+                setMessage(successMsg);
+                showSuccessToast("Password reset email sent!");
                 setIsSuccess(true);
                 setEmail("");
             } else {
-                setMessage(response.message || "Unable to process request. Please try again.");
+                const errorMsg = response.message || "Unable to process request. Please try again.";
+                setMessage(errorMsg);
+                showErrorToast(errorMsg);
                 setIsSuccess(false);
             }
         } catch (error) {
             console.error("Forgot password error:", error);
-            setMessage("An error occurred. Please try again later.");
+            const errorMsg = "An error occurred. Please try again later.";
+            setMessage(errorMsg);
+            showErrorToast(errorMsg);
             setIsSuccess(false);
         } finally {
             setIsLoading(false);
@@ -63,11 +81,12 @@ function ForgotPassword({ onBack }) {
                             name="email"
                             placeholder="Enter your email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={handleEmailChange}
                             required
                             disabled={isLoading}
                         />
                     </span>
+                    {error && <span className="error-message">{error}</span>}
                 </div>
 
                 <button 

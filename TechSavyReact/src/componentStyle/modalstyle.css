@@ -66,9 +66,10 @@
     position: absolute;
     top: 10px;
     right: 15px;
-    font-size: 1.5em;
+    font-size: 2.5em;
     cursor: pointer;
     color: #555;
+    z-index: 99;
 }
 
 .popup .close-btn:hover {
@@ -162,10 +163,16 @@
     background-color: #0056b3;
 }
 
-.error-message {
+.popup .error-message {
     color: #dc3545;
-    text-align: center;
-    margin: 0.5rem 0;
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+}
+
+.popup .password-container .error-message {
+    text-align: left;
+    margin: 4px 0 0 0;
 }
 
 .login-options {
@@ -289,12 +296,6 @@
 
 /* Responsive Design */
 @media screen and (max-width: 640px) {
-    .popup-content {
-        width: 95%;
-        max-width: 95%;
-        max-height: 95vh;
-        padding: 15px;
-    }
 
     .popup h2 {
         font-size: 1.3rem;
@@ -309,6 +310,8 @@
     .password-container {
         flex-direction: column;
         align-items: stretch;
+        margin-bottom: 0.5rem;
+        padding: 0;
     }
 
     .password-input-wrapper,
@@ -328,7 +331,7 @@
 
 @media screen and (max-width: 480px) {
     .popup-content {
-        padding: 12px;
+        padding: 8px;
         border-radius: 6px;
     }
 
@@ -340,5 +343,75 @@
     #loginForm div label {
         width: 100%;
         text-align: left;
+    }
+}
+
+/* Logout Confirmation Modal Styles */
+.logout-confirmation {
+    text-align: center;
+    padding: 20px;
+}
+
+.logout-confirmation h2 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.logout-confirmation p {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+}
+
+.logout-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.logout-cancel-btn,
+.logout-confirm-btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.logout-cancel-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.logout-cancel-btn:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.logout-confirm-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.logout-confirm-btn:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+@media screen and (max-width: 640px) {
+    .logout-actions {
+        flex-direction: column;
+    }
+
+    .logout-cancel-btn,
+    .logout-confirm-btn {
+        width: 100%;
     }
 }

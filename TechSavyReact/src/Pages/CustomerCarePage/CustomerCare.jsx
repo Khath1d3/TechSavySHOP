@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Header2 from "../../Components/Header2";
+import Header from "../../Components/Header";
 import Footer from "../../Components/Footer";
 import "./CustomerCareStyle.css";
 
@@ -24,7 +24,7 @@ function CustomerCare() {
 
     return (
         <>
-            <Header2 />
+            <Header />
             <div className="customercare-container">
                 <h1 className="customercare-title">Customer Care</h1>
 

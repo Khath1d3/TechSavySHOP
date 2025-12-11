@@ -1,7 +1,6 @@
 .shop-container {
     display: flex;
     padding: 20px;
-    padding-top: 16vh;
     gap: 20px;
 }
 
@@ -54,6 +53,7 @@
     transition: all 0.3s ease;
     cursor: pointer;
     background-color:white;
+    position: relative;
 }
 
 .product-card:hover {
@@ -99,6 +99,45 @@
 
 .product-card button:hover {
     background-color: #4b6b4b;
+}
+
+.add-to-cart-success {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #28a745;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+    animation: slideUpFade 2s ease-out forwards;
+    z-index: 10;
+}
+
+@keyframes slideUpFade {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px);
+    }
+    20% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    80% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px);
+    }
+}
+
+.product-card {
+    position: relative;
 }
 
 /* Pagination styles */
@@ -308,7 +347,7 @@
     position: fixed;
     top: 100px;
     right: 0;
-    z-index: 999;
+    z-index: 99;
     background-color: green;
     color: white;
     border: none;
@@ -404,7 +443,6 @@
     .shop-container {
         position: relative;
         padding: 15px;
-        padding-top: 14vh!important;
         gap: 15px;
     }
 
@@ -422,7 +460,6 @@
         box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
         padding: 20px;
         margin-bottom: 0;
-        padding-top: 15vh!important;
     }
 
     .product-filters.product-filter-open {

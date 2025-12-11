@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Header2 from "../../Components/Header2";
+import Header from "../../Components/Header";
 import Footer from "../../Components/Footer";
 import "./AboutUsStyle.css";
 
@@ -24,7 +24,7 @@ function AboutUs() {
 
     return (
         <>
-            <Header2 />
+            <Header />
             <div className="aboutus-container">
                 <h1 className="aboutus-title">About Us</h1>
 

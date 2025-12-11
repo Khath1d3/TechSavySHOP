@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaFilter, FaTimes } from "react-icons/fa";
 import DeviceCard from "./DeviceCard";
 import "../componentStyle/DeviceListstyle.css"; // Import your CSS file for styling
 import {useLoader} from "../assets/LoaderContext";
+import { AuthContext } from "../assets/AuthContext";
+import { useCart } from "../assets/CartContext";
 import {getData,postData} from "./ApiService";
 
 function DeviceList() {
   const navigate = useNavigate();
+  const { isLoggedIn } = useContext(AuthContext);
+  const { cartCount } = useCart();
 
   const [devices, setDevices] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,9 +55,11 @@ useEffect(() => {
 
   const GetCart = async () => {
     try {
-      const cartData = await getData("CustomerCart", { includeRelated: true });
-      if (cartData.success) {
-        setCartItems(cartData.data || []);
+      if (isLoggedIn) {
+        const cartData = await getData("CustomerCart", { includeRelated: true });
+        if (cartData.success) {
+          setCartItems(cartData.data || []);
+        }
       }
     } catch (error) {
       // Cart is empty or not found - this is fine, just set empty array
@@ -68,6 +74,31 @@ useEffect(() => {
   GetProduct();
   GetCart();
 }, []);
+
+// Re-fetch cart when cartCount changes (when items are added/removed)
+useEffect(() => {
+  const GetCart = async () => {
+    try {
+      if (isLoggedIn) {
+        const cartData = await getData("CustomerCart", { includeRelated: true });
+        if (cartData.success) {
+          setCartItems(cartData.data || []);
+        }
+      }
+    } catch (error) {
+      // Cart is empty or not found - this is fine, just set empty array
+      if (error.message && error.message.includes("Cart is empty")) {
+        setCartItems([]);
+      } else {
+        console.error("Error fetching cart:", error);
+      }
+    }
+  };
+
+  if (isLoggedIn) {
+    GetCart();
+  }
+}, [cartCount, isLoggedIn]);
 
   const indexOfLastDevice = currentPage * itemsPerPage;
   const indexOfFirstDevice = indexOfLastDevice - itemsPerPage;

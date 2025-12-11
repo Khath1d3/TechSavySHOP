@@ -1,5 +1,5 @@
 import Footer from "../../Components/Footer";
-import Header2 from "../../Components/Header2";
+import Header from "../../Components/Header";
 import DeviceList from "../../Components/DeviceList";
 import React, { useEffect } from "react";
 
@@ -7,7 +7,7 @@ function Product() {
 
   return (
    <>
-   <Header2/>
+   <Header/>
     <DeviceList/>
    <Footer/>
    </>

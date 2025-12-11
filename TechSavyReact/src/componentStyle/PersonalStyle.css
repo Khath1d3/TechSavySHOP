@@ -20,6 +20,19 @@
     border-bottom: .5px solid #f0eaea;
     padding: 10px 0;
 }
+
+.personal-details__form-group .error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+}
+
+@media screen and (max-width: 640px) {
+    .personal-details__form-group {
+        padding: 8px 0;
+    }
+}
 .personal-details__button{
     padding: 10px 20px;
     background-color: green;
@@ -57,7 +70,7 @@
 
 @media screen and (max-width: 640px) {
     .personal-details__form {
-        padding: 10px;
+        padding: 0;
     }
 
     .personal-details__input {

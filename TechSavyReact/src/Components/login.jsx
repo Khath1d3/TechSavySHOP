@@ -2,10 +2,13 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../assets/AuthContext";
 import { useLoader } from "../assets/LoaderContext";
 import { useNavigate } from "react-router-dom";
-import { getData,postData } from "./ApiService"; 
+import { getData, postData } from "./ApiService"; 
+import { validateEmail, validateRequired } from "../utils/validation";
+import { showSuccessToast, showErrorToast } from "../utils/toast"; 
 
 function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { login, redirectPath, setRedirectPath } = useContext(AuthContext);
@@ -13,7 +16,13 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
   const { showLoader, hideLoader } = useLoader();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: "" });
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -23,9 +32,6 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
   const handleForgotPassword = () => {
     if (typeof onForgotPassword === "function") {
       onForgotPassword();
-    } else {
-      // Default behavior - you can implement forgot password logic here
-      alert("Forgot password functionality coming soon!");
     }
   };
 
@@ -37,6 +43,28 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    const newErrors = {};
+    
+    // Validate email
+    const emailValidation = validateEmail(formData.email);
+    if (!emailValidation.isValid) {
+      newErrors.email = emailValidation.error;
+    }
+    
+    // Validate password
+    const passwordValidation = validateRequired(formData.password);
+    if (!passwordValidation.isValid) {
+      newErrors.password = "Password is required";
+    }
+    
+    // If there are any errors, set them and stop submission
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      showErrorToast("Please fix the errors in the form");
+      return;
+    }
+    
     showLoader();
     try {
       const response = await postData("Login", formData);
@@ -44,7 +72,8 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
       if (response.success) {
         const data = await response;
         console.log("Login data received:", { hasToken: !!data.token, tokenLength: data.token?.length });
-        await login(data.token);  
+        await login(data.token);
+        showSuccessToast("Login successful! Welcome back!");
         if (typeof onSuccess === "function") onSuccess();
         if(redirectPath && redirectPath !== "/"){
           navigate(redirectPath, {replace: true});
@@ -52,10 +81,14 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
         }
       } else {
         const err = await response.json();
-        setMessage(`${err.message || "Login failed"}`);
+        const errorMsg = err.message || "Login failed";
+        setMessage(errorMsg);
+        showErrorToast(errorMsg);
       }
     } catch (error) {
-      setMessage("Login failed. Please try again.");
+      const errorMsg = "Login failed. Please try again.";
+      setMessage(errorMsg);
+      showErrorToast(errorMsg);
       console.error("Login error:", error);
     } finally {
       hideLoader();
@@ -78,6 +111,7 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
             required
           />
           </span>
+          {errors.email && <span className="error-message">{errors.email}</span>}
         </div>
         <div className="password-container">
           <label htmlFor="loginPassword">Password:</label>
@@ -99,6 +133,7 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
               {showPassword ? "👁️" : "👁️‍🗨️"}
             </button>
             </span>
+          {errors.password && <span className="error-message">{errors.password}</span>}
         </div>
         
         <button type="submit" className="btn login-btn">

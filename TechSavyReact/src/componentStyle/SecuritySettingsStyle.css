@@ -92,11 +92,11 @@
     margin-bottom: 24px;
 }
 
-.form-group {
+.security-settings .form-group {
     margin-bottom: 20px;
 }
 
-.form-group label {
+.security-settings .form-group label {
     display: block;
     font-size: 0.9rem;
     color: #333;
@@ -104,7 +104,7 @@
     font-weight: 500;
 }
 
-.form-group input {
+.security-settings .form-group input {
     width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
@@ -114,28 +114,35 @@
     box-sizing: border-box;
 }
 
-.form-group input:focus {
+.security-settings .form-group input:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
-.form-group input::placeholder {
+.security-settings .form-group input::placeholder {
     color: #999;
 }
 
+.security-settings .form-group .error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+}
+
 /* Password Input Wrapper */
-.password-input-wrapper {
+.security-settings .password-input-wrapper {
     position: relative;
     display: flex;
     align-items: center;
 }
 
-.password-input-wrapper input {
+.security-settings .password-input-wrapper input {
     padding-right: 45px; /* Make room for the eye icon */
 }
 
-.password-toggle-btn {
+.security-settings .password-toggle-btn {
     position: absolute;
     right: 8px;
     background: none;
@@ -217,7 +224,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
     .security-settings {
-        padding: 15px;
+        padding: 8px;
     }
 
     .security-settings-header h2 {
@@ -225,11 +232,16 @@
     }
 
     .security-card {
-        padding: 16px;
+        padding: 12px;
+    }
+    
+    .security-settings .form-group {
+        margin-bottom: 12px;
     }
 
     .modal-actions {
         flex-direction: column;
+        margin-top: 16px;
     }
 
     .modal-actions .btn {

@@ -1,12 +1,15 @@
-import React,{useState,useEffect} from "react";
-import Header2 from "../../Components/Header2";
+import React,{useState,useEffect,useContext} from "react";
+import { createPortal } from "react-dom";
+import Header from "../../Components/Header";
 import Footer from "../../Components/Footer";
 import Modal from "../../Components/modal";
+import Login from "../../Components/login";
 import { useParams } from "react-router-dom";
 import "./ViewItemStyle.css";
 import DeviceCard from "../../Components/DeviceCard";
 import {useLoader} from "../../assets/LoaderContext";
 import { useCart } from "../../assets/CartContext";
+import { AuthContext } from "../../assets/AuthContext";
 import { getData, postData } from "../../Components/ApiService";
 
 
@@ -14,28 +17,21 @@ function ViewItemPage() {
 
       const [product, setProduct] = useState([]);
       const [related, setRelated] = useState([]);
+      const [productReviews, setProductReviews] = useState([]);
       const { showLoader, hideLoader } = useLoader();
       const { updateCartCount } = useCart();
+      const { isLoggedIn } = useContext(AuthContext);
       const { id } = useParams(); // product ID from the route
       const [message, setMessage] = useState("");
       const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
       const [selectedStarFilter, setSelectedStarFilter] = useState(0);
       const [isInCart, setIsInCart] = useState(false);
-      
-      const dummyReviews = [
-          { id: 1, user: "John Doe", rating: 5, comment: "Excellent product! Highly recommend.", date: "2025-01-15" },
-          { id: 2, user: "Jane Smith", rating: 4, comment: "Good quality, fast shipping.", date: "2025-01-10" },
-          { id: 3, user: "Mike Johnson", rating: 3, comment: "Average product, could be better.", date: "2025-01-05" },
-          { id: 4, user: "Sarah Williams", rating: 5, comment: "Perfect! Exactly what I needed.", date: "2024-12-28" },
-          { id: 5, user: "Tom Brown", rating: 2, comment: "Not as described, disappointed.", date: "2024-12-20" },
-          { id: 6, user: "Emily Davis", rating: 4, comment: "Great value for money.", date: "2024-12-15" },
-          { id: 7, user: "Chris Wilson", rating: 1, comment: "Poor quality, would not buy again.", date: "2024-12-10" },
-          { id: 8, user: "Lisa Anderson", rating: 5, comment: "Amazing! Best purchase ever.", date: "2024-12-05" }
-      ];
+      const [addedToCart, setAddedToCart] = useState(false);
+      const [showLoginModal, setShowLoginModal] = useState(false);
 
       const filteredReviews = selectedStarFilter === 0 
-          ? dummyReviews 
-          : dummyReviews.filter(review => review.rating === selectedStarFilter);
+          ? productReviews 
+          : productReviews.filter(review => review.reviewStars === selectedStarFilter);
 
 useEffect(() => {
   const fetchProduct = async () => {
@@ -78,7 +74,32 @@ useEffect(() => {
 }, [id]);
 
 useEffect(() => {
+  const fetchProductReviews = async () => {
+    try {
+      const response = await getData(`GetProductReview/${id}`);
+      if (response && response.data && Array.isArray(response.data)) {
+        setProductReviews(response.data);
+      } else {
+        setProductReviews([]);
+      }
+    } catch (error) {
+      console.error("Error fetching product reviews:", error);
+      setProductReviews([]);
+    }
+  };
+  
+  if (id) {
+    fetchProductReviews();
+  }
+}, [id]);
+
+useEffect(() => {
   const checkCart = async () => {
+    if (!isLoggedIn) {
+      setIsInCart(false);
+      return;
+    }
+    
     try {
       const response = await getData("CustomerCart", { includeRelated: true });
       if (response.success) {
@@ -92,14 +113,21 @@ useEffect(() => {
   };
 
   checkCart();
-}, [id]);
+}, [id, isLoggedIn]);
 
 const handleAddToCart = async () => {
+  if (!isLoggedIn) {
+    setShowLoginModal(true);
+    return;
+  }
+  
   try {
     showLoader();
     await postData("AddToCart", parseInt(id));
     setIsInCart(true);
     updateCartCount(); // Update cart count after adding
+    setAddedToCart(true);
+    setTimeout(() => setAddedToCart(false), 2000); // Hide after 2 seconds
   } catch (error) {
     console.error("Error adding to cart:", error);
     setMessage("Error adding to cart. Please try again later.");
@@ -109,6 +137,11 @@ const handleAddToCart = async () => {
 };
 
 const handleRemoveFromCart = async () => {
+  if (!isLoggedIn) {
+    setShowLoginModal(true);
+    return;
+  }
+  
   try {
     showLoader();
     await postData("RemoveFromCart", parseInt(id));
@@ -124,7 +157,7 @@ const handleRemoveFromCart = async () => {
 
     return (
         <>
-            <Header2 />
+            <Header />
             <div className="viewitem-view-item-page">
                 {product && product.productID ? (
                     <div className="view-item-container" key={product.id}>
@@ -137,10 +170,9 @@ const handleRemoveFromCart = async () => {
                                 {'★'.repeat(product.rating) + '☆'.repeat(5 - product.rating)}
                             </p>
                                 <h3>Description</h3>
-                                <p>This is a detailed description of the product. It includes all the features, 
-                                    specifications, and other relevant information that a customer would need to know before making a purchase.</p>
+                                <p>{product.description}</p>
                                 <button className="viewitem-view-reviews-btn" onClick={() => setIsReviewModalOpen(true)}>
-                                    View Reviews ({dummyReviews.length})
+                                    View Reviews ({productReviews.length})
                                 </button>
                         </div>
                         <div className="view-item-price">
@@ -157,6 +189,11 @@ const handleRemoveFromCart = async () => {
                                 <button className="viewitem-add-to-cart-btn" onClick={handleAddToCart}>
                                     Add to Cart
                                 </button>
+                            )}
+                            {addedToCart && (
+                                <div className="add-to-cart-success">
+                                    ✓ Added to cart!
+                                </div>
                             )}
                         </div>
                     </div>
@@ -190,43 +227,48 @@ const handleRemoveFromCart = async () => {
         {/* Reviews Modal */}
         <Modal isOpen={isReviewModalOpen} onClose={() => setIsReviewModalOpen(false)}>
             <div className="viewitem-reviews-modal">
-                <h2>Customer Reviews</h2>
-                
-                <div className="viewitem-star-filter">
-                    <button 
-                        className={`viewitem-filter-btn ${selectedStarFilter === 0 ? 'active' : ''}`}
-                        onClick={() => setSelectedStarFilter(0)}
-                    >
-                        All ({dummyReviews.length})
-                    </button>
-                    {[5, 4, 3, 2, 1].map(star => {
-                        const count = dummyReviews.filter(r => r.rating === star).length;
-                        return (
-                            <button 
-                                key={star}
-                                className={`viewitem-filter-btn ${selectedStarFilter === star ? 'active' : ''}`}
-                                onClick={() => setSelectedStarFilter(star)}
-                            >
-                                {'★'.repeat(star)}{'☆'.repeat(5 - star)} ({count})
-                            </button>
-                        );
-                    })}
+                <div className="modal-header-fixed">
+                    <h2>Customer Reviews</h2>
+                    
+                    <div className="viewitem-star-filter">
+                        <button 
+                            className={`viewitem-filter-btn ${selectedStarFilter === 0 ? 'active' : ''}`}
+                            onClick={() => setSelectedStarFilter(0)}
+                        >
+                            All ({productReviews.length})
+                        </button>
+                        {[5, 4, 3, 2, 1].map(star => {
+                            const count = productReviews.filter(r => r.reviewStars === star).length;
+                            return (
+                                <button 
+                                    key={star}
+                                    className={`viewitem-filter-btn ${selectedStarFilter === star ? 'active' : ''}`}
+                                    onClick={() => setSelectedStarFilter(star)}
+                                >
+                                    {'★'.repeat(star)}{'☆'.repeat(5 - star)} ({count})
+                                </button>
+                            );
+                        })}
+                    </div>
                 </div>
 
-                <div className="viewitem-reviews-list">
+                <div className="modal-body-scrollable viewitem-reviews-list">
                     {filteredReviews.length > 0 ? (
                         filteredReviews.map(review => (
-                            <div key={review.id} className="viewitem-review-card">
+                            <div key={review.reviewID} className="viewitem-review-card">
                                 <div className="viewitem-review-header">
-                                    <div>
-                                        <h4>{review.user}</h4>
-                                        <p className="viewitem-review-date">{review.date}</p>
-                                    </div>
+                                    <p className="viewitem-review-date">
+                                        {new Date(review.reviewDate).toLocaleDateString("en-US", { 
+                                            year: "numeric", 
+                                            month: "long", 
+                                            day: "numeric" 
+                                        })}
+                                    </p>
                                     <div className="viewitem-review-rating">
-                                        {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
+                                        {'★'.repeat(review.reviewStars)}{'☆'.repeat(5 - review.reviewStars)}
                                     </div>
                                 </div>
-                                <p className="viewitem-review-comment">{review.comment}</p>
+                                <p className="viewitem-review-comment">{review.reviewDescription}</p>
                             </div>
                         ))
                     ) : (
@@ -235,6 +277,14 @@ const handleRemoveFromCart = async () => {
                 </div>
             </div>
         </Modal>
+
+        {/* Login Modal Portal */}
+        {showLoginModal && createPortal(
+            <Modal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)}>
+                <Login onSuccess={() => setShowLoginModal(false)} />
+            </Modal>,
+            document.body
+        )}
 
         <Footer />
 

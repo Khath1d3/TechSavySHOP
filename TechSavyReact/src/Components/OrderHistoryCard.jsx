@@ -62,9 +62,11 @@ function OrderHistoryCard({ order }) {
             {showDetailsModal && (
                 <Modal isOpen={showDetailsModal} onClose={() => setShowDetailsModal(false)}>
                     <div className="order-details-modal">
-                        <h2>Order Details</h2>
-                        
-                        <div className="order-detail-section">
+                        <div className="modal-header-fixed">
+                            <h2>Order Details</h2>
+                        </div>
+                        <div className="modal-body-scrollable">
+                            <div className="order-detail-section">
                             <h3>Order Information</h3>
                             <div className="order-detail-grid">
                                 <div className="detail-item">
@@ -116,6 +118,7 @@ function OrderHistoryCard({ order }) {
                                     </div>
                                 ))}
                             </div>
+                        </div>
                         </div>
 
                         <button 

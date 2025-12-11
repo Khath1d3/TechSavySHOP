@@ -3,7 +3,6 @@
     max-width: 1400px;
     margin: 0 auto;
     padding: 40px 20px;
-    padding-top: 15vh!important;
     min-height: 70vh;
 }
 
@@ -23,7 +22,9 @@
     text-align: center;
     border: 1px solid #fcc;
 }
-
+   .error-message {
+    padding: 0!important;
+  }
 .review-order-content {
     display: grid;
     grid-template-columns: 1fr 400px;
@@ -592,7 +593,6 @@
 @media (max-width: 768px) {
     .review-order-container {
         padding: 20px 15px;
-        padding-top: 14vh!important;
     }
 
     .review-order-title {
@@ -643,6 +643,18 @@
 
     .review-voucher-input-group button {
         width: 100%;
+    }
+
+    .review-form-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .review-save-address-btn,
+    .review-cancel-btn {
+        width: 100%;
+        padding: 14px;
+        font-size: 1rem;
     }
 }
 

@@ -9,7 +9,7 @@ import  "./Landingpagestyle.css"
 function LandingPage() {
   return (
    <>
-    <Header/>
+    <Header isLandingPage={true} />
     <MainSection/>
     <Footer/>
    </>

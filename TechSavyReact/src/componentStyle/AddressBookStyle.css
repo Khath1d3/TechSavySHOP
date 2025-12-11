@@ -56,6 +56,12 @@
     border-radius: 8px;
 }
 
+@media screen and (max-width: 640px) {
+    .address-book {
+        padding: 8px;
+    }
+}
+
 .address-book h2 {
     color: #333;
     margin-bottom: 20px;
@@ -164,24 +170,21 @@
 }
 
 /* ===== Form Group Styles ===== */
-.form-group {
+.address-book .form-group {
     margin-bottom: 20px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 
-.form-group label {
-     margin-bottom: 8px;
+.address-book .form-group label {
+    margin-bottom: 8px;
     color: #333;
     font-weight: 600;
     font-size: 14px;
     letter-spacing: 0.5px;
-    display: inline-block;
-    width: 25vw;
-    text-align: justify;
 }
 
-.form-group input {
+.address-book .form-group input {
     width: 100%;
     padding: 12px 15px;
     border: 1px solid #ddd;
@@ -192,15 +195,22 @@
     box-sizing: border-box;
 }
 
-.form-group input:focus {
+.address-book .form-group input:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
-.form-group input::placeholder {
+.address-book .form-group input::placeholder {
     color: #aaa;
     font-style: italic;
+}
+
+.address-book .form-group .error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
 }
 
 .form-group input:required:invalid {
@@ -258,7 +268,10 @@
 .btn-cancel:active {
     transform: translateY(0);
 }
-
+.form-group .error-message {
+    padding: 0!important;
+    line-height: 0!important;
+}
 /* ===== Responsive Design ===== */
 @media screen and (max-width: 968px) {
     .address-book {
@@ -268,12 +281,14 @@
     .address-book h2 {
         font-size: 24px;
     }
-
-    .form-group {
+   
+    .address-book .form-group {
         flex-direction: column;
+        margin-bottom: 8px;
+        padding: 0;
     }
 
-    .form-group label {
+    .address-book .form-group label {
         width: 100%;
         text-align: left;
         margin-bottom: 8px;
@@ -300,30 +315,35 @@
         width: 100%;
     }
 
-    .form-group input {
+    .address-book .form-group input {
         padding: 10px 12px;
         font-size: 16px; /* Prevents zoom on mobile */
     }
 
     .address-book {
-        padding: 10px;
+        padding: 5px;
     }
 
     .address-book h2 {
         font-size: 20px;
+        margin-bottom: 12px;
     }
 
     .address-option {
         flex-direction: column;
-        padding: 12px;
+        padding: 10px;
     }
 
     .actions {
         position: static;
         transform: none;
         flex-direction: row;
-        margin-top: 10px;
+        margin-top: 8px;
         justify-content: flex-end;
+    }
+    
+    .btnCont {
+        margin-bottom: 12px;
     }
 }
 

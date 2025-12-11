@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Header2 from "../../Components/Header2";
+import Header from "../../Components/Header";
 import Footer from "../../Components/Footer";
 import Modal from "../../Components/modal";
 import { getData, postData } from "../../Components/ApiService";
 import { useLoader } from "../../assets/LoaderContext";
 import { useCart } from "../../assets/CartContext";
+import { AuthContext } from "../../assets/AuthContext";
 import "./ReviewOrderStyle.css";
 
 function ReviewOrderPage() {
@@ -13,6 +14,7 @@ function ReviewOrderPage() {
     const location = useLocation();
     const { showLoader, hideLoader } = useLoader();
     const { updateCartCount } = useCart();
+    const { isLoggedIn } = useContext(AuthContext);
 
     const [cartItems, setCartItems] = useState([]);
     const [cartId, setCartId] = useState(null);
@@ -28,6 +30,7 @@ function ReviewOrderPage() {
     const [voucherApplied, setVoucherApplied] = useState(false);
     const [voucherMessage, setVoucherMessage] = useState("");
     const [message, setMessage] = useState("");
+    const [addressFormError, setAddressFormError] = useState("");
     const [countdown, setCountdown] = useState(5);
     const [newAddressForm, setNewAddressForm] = useState({
         addressLabel: '',
@@ -38,6 +41,11 @@ function ReviewOrderPage() {
 
     // Fetch cart items
     const fetchCartItems = async () => {
+        if (!isLoggedIn) {
+            setCartItems([]);
+            return;
+        }
+        
         showLoader();
         try {
             const data = await getData("CustomerCart", { includeRelated: true });
@@ -105,26 +113,10 @@ function ReviewOrderPage() {
             return;
         }
 
-        try {
-            showLoader();
-            const response = await postData("ApplyVoucher", { voucherCode });
-            
-            if (response.success) {
-                setDiscount(response.discountPercentage || 10);
-                setVoucherApplied(true);
-                setVoucherMessage(`Voucher applied! ${response.discountPercentage || 10}% discount`);
-            } else {
-                setVoucherMessage(response.message || "Invalid voucher code");
-                setDiscount(0);
-                setVoucherApplied(false);
-            }
-        } catch (error) {
-            setVoucherMessage("Error applying voucher");
-            setDiscount(0);
-            setVoucherApplied(false);
-        } finally {
-            hideLoader();
-        }
+        // All vouchers are invalid
+        setVoucherMessage("Invalid voucher code");
+        setDiscount(0);
+        setVoucherApplied(false);
     };
 
     // Handle address change
@@ -143,12 +135,13 @@ function ReviewOrderPage() {
     // Handle add new address
     const handleAddNewAddress = async () => {
         if (!newAddressForm.addressLabel || !newAddressForm.addressLine1 || !newAddressForm.city || !newAddressForm.postalCode) {
-            setMessage("Please fill all address fields");
+            setAddressFormError("Please fill all address fields");
             return;
         }
 
         try {
             showLoader();
+            setAddressFormError("");
             const response = await postData("AddAddress", newAddressForm);
             if (response.success) {
                 await fetchAddresses();
@@ -157,11 +150,11 @@ function ReviewOrderPage() {
                 setMessage("Address added successfully");
                 setTimeout(() => setMessage(""), 3000);
             } else {
-                setMessage(response.message || "Failed to add address");
+                setAddressFormError(response.message || "Failed to add address");
             }
         } catch (error) {
             console.error("Error adding address:", error);
-            setMessage("Error adding address");
+            setAddressFormError("Error adding address");
         } finally {
             hideLoader();
         }
@@ -236,7 +229,7 @@ function ReviewOrderPage() {
 
     return (
         <>
-            <Header2 />
+            <Header />
             <div className="review-order-container">
                 <h1 className="review-order-title">Review Your Order</h1>
 
@@ -393,6 +386,7 @@ function ReviewOrderPage() {
                         onClick={() => {
                             setShowAddressModal(false);
                             setShowAddNewAddressModal(true);
+                            setAddressFormError("");
                         }}
                     >
                         + Add New Address
@@ -430,6 +424,7 @@ function ReviewOrderPage() {
             <Modal isOpen={showAddNewAddressModal} onClose={() => setShowAddNewAddressModal(false)}>
                 <div className="review-add-address-modal">
                     <h2>Add New Address</h2>
+                    {addressFormError && <p className="error-message">{addressFormError}</p>}
                     <div className="review-address-form">
                         <div className="review-form-group">
                             <label>Address Label (e.g., Home, Work)</label>
@@ -476,6 +471,8 @@ function ReviewOrderPage() {
                                 onClick={() => {
                                     setShowAddNewAddressModal(false);
                                     setShowAddressModal(true);
+                                    setAddressFormError("");
+                                    setNewAddressForm({ addressLabel: '', addressLine1: '', city: '', postalCode: '' });
                                 }}
                             >
                                 Cancel

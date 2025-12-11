@@ -12,8 +12,8 @@ import Account from './Pages/Account/Account.jsx'
 import React, { useEffect, useState } from "react";
 import Loader from "./Components/loader.jsx";
 import Header from './Components/Header.jsx'
-import Header2 from './Components/Header2.jsx'
 import TokenWatcher from "./Components/TokenWatcher.jsx";
+import ProtectedRoute from "./assets/ProtectedRoute.jsx";
 
 
 function App() {
@@ -42,10 +42,10 @@ function App() {
           <Routes>
             <Route path='/' element={<LandingPage/>} />
             <Route path='/product' element={<Product/>} />
-            <Route path='/cart' element={<CartPage/>} />
+            <Route path='/cart' element={<ProtectedRoute><CartPage/></ProtectedRoute>} />
             <Route path='/viewitem/:id' element={<ViewItemPage/>} />
-            <Route path='/review-order' element={<ReviewOrderPage/>} />
-            <Route path='/account/*' element={<Account/>} />
+            <Route path='/review-order' element={<ProtectedRoute><ReviewOrderPage/></ProtectedRoute>} />
+            <Route path='/account/*' element={<ProtectedRoute><Account/></ProtectedRoute>} />
             <Route path='/about-us' element={<AboutUs/>} />
             <Route path='/customer-care' element={<CustomerCare/>} />
           </Routes>

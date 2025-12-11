@@ -33,7 +33,6 @@ function OrderHistory() {
                     paymentMethod: order.paymentMethod,
                     products: order.orderItems || []
                 }));
-                console.log("Fetched Orders:", orders);
                 // Sort by date (newest first)
                 orders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
                 

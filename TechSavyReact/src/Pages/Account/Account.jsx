@@ -1,7 +1,7 @@
 import React,{useEffect,useState} from "react";
 import { useLocation,Link, useNavigate, Routes, Route, Navigate } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
-import Header2 from "../../Components/Header2";
+import Header from "../../Components/Header";
 import Footer from "../../Components/Footer";
 import './AccountStyle.css'
 import Invoices from "../../Components/invoices"
@@ -44,7 +44,6 @@ function Account() {
   useEffect(() => {
     const params = new URLSearchParams(location.hash.split('?')[1]);
     const openTab = params.get('open');
-    console.log(params.get('open'));
     // Find the route object from either orders or profile routes
     const foundOrderroute = subRoutesOrders.find(r => r.path === openTab);
     const foundProfroute = subRoutesProfile.find(r => r.path === openTab);
@@ -60,7 +59,7 @@ function Account() {
     
     return(
         <>
-            <Header2/>
+            <Header/>
 
             {/* Floating Menu Button */}
             <button className="floating-menu-btn" onClick={toggleMenu}>

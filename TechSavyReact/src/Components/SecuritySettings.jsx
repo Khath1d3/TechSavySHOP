@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { postData } from "./ApiService";
 import Modal from "./modal";
+import { validatePassword, validateRequired } from "../utils/validation";
+import { showSuccessToast, showErrorToast } from "../utils/toast";
 import "../componentStyle/SecuritySettingsStyle.css";
 
 function SecuritySettings() {
@@ -8,6 +10,7 @@ function SecuritySettings() {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [errors, setErrors] = useState({});
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState(""); // "success" or "error"
     const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -15,15 +18,29 @@ function SecuritySettings() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const handleChangePassword = async () => {
-        if (newPassword !== confirmPassword) {
-            setMessage("New passwords do not match!");
-            setMessageType("error");
-            return;
+        const newErrors = {};
+        
+        // Validate current password
+        const currentPasswordValidation = validateRequired(currentPassword);
+        if (!currentPasswordValidation.isValid) {
+            newErrors.currentPassword = "Current password is required";
         }
-
-        if (newPassword.length < 6) {
-            setMessage("New password must be at least 6 characters long!");
-            setMessageType("error");
+        
+        // Validate new password
+        const newPasswordValidation = validatePassword(newPassword);
+        if (!newPasswordValidation.isValid) {
+            newErrors.newPassword = newPasswordValidation.error;
+        }
+        
+        // Check password confirmation
+        if (newPassword !== confirmPassword) {
+            newErrors.confirmPassword = "Passwords do not match";
+        }
+        
+        // If there are any errors, set them and stop submission
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            showErrorToast("Please fix the errors in the form");
             return;
         }
 
@@ -37,6 +54,7 @@ function SecuritySettings() {
             setMessageType(response.ok ? "success" : "error");
 
             if (response.ok) {
+                showSuccessToast("Password changed successfully!");
                 setTimeout(() => {
                     setShowModal(false);
                     setCurrentPassword("");
@@ -44,11 +62,16 @@ function SecuritySettings() {
                     setConfirmPassword("");
                     setMessage("");
                     setMessageType("");
+                    setErrors({});
                 }, 2000);
+            } else {
+                showErrorToast(response.message || "Password change failed");
             }
         } catch (error) {
-            setMessage("Error: " + error.message);
+            const errorMsg = "Error: " + error.message;
+            setMessage(errorMsg);
             setMessageType("error");
+            showErrorToast(errorMsg);
         }
     };
 
@@ -59,6 +82,18 @@ function SecuritySettings() {
         setConfirmPassword("");
         setMessage("");
         setMessageType("");
+        setErrors({});
+    };
+    
+    const handleInputChange = (field, value) => {
+        if (field === 'currentPassword') setCurrentPassword(value);
+        else if (field === 'newPassword') setNewPassword(value);
+        else if (field === 'confirmPassword') setConfirmPassword(value);
+        
+        // Clear error for this field when user starts typing
+        if (errors[field]) {
+            setErrors({ ...errors, [field]: "" });
+        }
     };
 
     return (
@@ -91,8 +126,9 @@ function SecuritySettings() {
                             type="password"
                             placeholder="Enter current password"
                             value={currentPassword}
-                            onChange={(e) => setCurrentPassword(e.target.value)}
+                            onChange={(e) => handleInputChange('currentPassword', e.target.value)}
                         />
+                        {errors.currentPassword && <span className="error-message">{errors.currentPassword}</span>}
                     </div>
                     
                     <div className="form-group">
@@ -100,10 +136,11 @@ function SecuritySettings() {
                         <input
                             id="newPassword"
                             type="password"
-                            placeholder="Enter new password"
+                            placeholder="Enter new password (8+ chars, uppercase, lowercase, number)"
                             value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
+                            onChange={(e) => handleInputChange('newPassword', e.target.value)}
                         />
+                        {errors.newPassword && <span className="error-message">{errors.newPassword}</span>}
                     </div>
                     
                     <div className="form-group">
@@ -113,8 +150,9 @@ function SecuritySettings() {
                             type="password"
                             placeholder="Confirm new password"
                             value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
                         />
+                        {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
                     </div>
                     
                     {message && (
