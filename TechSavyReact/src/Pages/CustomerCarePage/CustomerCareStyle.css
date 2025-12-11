@@ -223,10 +223,7 @@
 
 /* Responsive Design */
 @media (max-width: 968px) {
-    .customercare-container {
-        padding-top: 14vh;
-    }
-
+ 
     .customercare-title {
         font-size: 2rem;
     }
@@ -247,7 +244,6 @@
 @media (max-width: 640px) {
     .customercare-container {
         padding: 20px 15px;
-        padding-top: 14vh;
     }
 
     .customercare-title {

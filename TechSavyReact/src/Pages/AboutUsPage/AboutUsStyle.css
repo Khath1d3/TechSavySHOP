@@ -114,10 +114,6 @@
 
 /* Responsive Design */
 @media (max-width: 968px) {
-    .aboutus-container {
-        padding-top: 14vh;
-    }
-
     .aboutus-title {
         font-size: 2rem;
     }
@@ -134,7 +130,6 @@
 @media (max-width: 640px) {
     .aboutus-container {
         padding: 20px 15px;
-        padding-top: 14vh;
     }
 
     .aboutus-title {
