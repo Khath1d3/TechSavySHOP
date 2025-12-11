@@ -164,10 +164,13 @@ useEffect(() => {
     
     {/* Modals */}
     <Modal isOpen={isSignupModalOpen} onClose={() => setIsSignupModalOpen(false)}>
-        <Signup onSwitchToLogin={() => {
-            setIsSignupModalOpen(false);
-            setIsLoginModalOpen(true);
-        }} />
+        <Signup 
+            onSuccess={() => setIsSignupModalOpen(false)}
+            onSwitchToLogin={() => {
+                setIsSignupModalOpen(false);
+                setIsLoginModalOpen(true);
+            }} 
+        />
     </Modal>
     <Modal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)}>
         <Login 

@@ -9,7 +9,7 @@ import {
 } from "../utils/validation";
 import { showSuccessToast, showErrorToast } from "../utils/toast";
 
-function Signup({ onSwitchToLogin }) {
+function Signup({ onSwitchToLogin, onSuccess }) {
   const [formData, setFormData] = useState({
     userType: "",
     firstName: "",
@@ -111,7 +111,6 @@ function Signup({ onSwitchToLogin }) {
       const response = await postData("register", requestData);
       if (response.success) {
         showSuccessToast("Registration successful! Welcome to Tech Savvy!");
-        setMessage("Registration successful!");
         // Reset form
         setFormData({
           userType: "",
@@ -124,6 +123,12 @@ function Signup({ onSwitchToLogin }) {
           confirmPassword: "",
         });
         setErrors({});
+        setMessage("");
+        
+        // Close modal on success
+        if (typeof onSuccess === "function") {
+          onSuccess();
+        }
       } else {
         showErrorToast(response.message || "Registration failed");
         setMessage(`Error: ${response.message || "Registration failed"}`);
