@@ -28,34 +28,10 @@ function ForgotPassword({ onBack }) {
             return;
         }
 
-        setIsLoading(true);
-        setMessage("");
-        setError("");
-
-        try {
-            const response = await postData("ForgotPassword", { email });
-            
-            if (response.success) {
-                const successMsg = "If an account exists with this email, a new password will be sent. Please check your email and change it after logging in.";
-                setMessage(successMsg);
-                showSuccessToast("Password reset email sent!");
-                setIsSuccess(true);
-                setEmail("");
-            } else {
-                const errorMsg = response.message || "Unable to process request. Please try again.";
-                setMessage(errorMsg);
-                showErrorToast(errorMsg);
-                setIsSuccess(false);
-            }
-        } catch (error) {
-            console.error("Forgot password error:", error);
-            const errorMsg = "An error occurred. Please try again later.";
-            setMessage(errorMsg);
-            showErrorToast(errorMsg);
-            setIsSuccess(false);
-        } finally {
-            setIsLoading(false);
-        }
+        // Feature not available
+        showErrorToast("Sorry, this feature does not work :(");
+        setMessage("Sorry, this feature does not work :(");
+        setIsSuccess(false);
     };
 
     const handleBackToLogin = () => {
