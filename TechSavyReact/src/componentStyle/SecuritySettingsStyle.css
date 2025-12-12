@@ -77,6 +77,9 @@
 /* Change Password Modal Styles */
 .change-password-modal {
     text-align: left;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .change-password-modal h3 {
@@ -84,12 +87,27 @@
     color: #333;
     margin-bottom: 8px;
     font-weight: 600;
+    position: sticky;
+    top: 0;
+    background: white;
+    padding-bottom: 8px;
+    z-index: 1;
 }
 
 .modal-description {
     color: #666;
     font-size: 0.9rem;
     margin-bottom: 24px;
+    position: sticky;
+    top: 48px;
+    background: white;
+    padding-bottom: 8px;
+    z-index: 1;
+}
+
+.modal-form-content {
+    overflow-y: auto;
+    flex: 1;
 }
 
 .security-settings .form-group {
@@ -114,6 +132,19 @@
     box-sizing: border-box;
 }
 
+/* Password Input Wrapper */
+.security-settings .password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.security-settings .password-input-wrapper input {
+    width: 100%;
+    padding-right: 45px; /* Make room for the eye icon */
+}
+
 .security-settings .form-group input:focus {
     outline: none;
     border-color: #007bff;
@@ -129,17 +160,6 @@
     font-size: 12px;
     margin-top: 4px;
     display: block;
-}
-
-/* Password Input Wrapper */
-.security-settings .password-input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.security-settings .password-input-wrapper input {
-    padding-right: 45px; /* Make room for the eye icon */
 }
 
 .security-settings .password-toggle-btn {
