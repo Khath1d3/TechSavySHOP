@@ -71,16 +71,15 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
       console.log("Login response:", response);
       if (response.success) {
         const data = await response;
-        console.log("Login data received:", { hasToken: !!data.token, tokenLength: data.token?.length });
         await login(data.token);
-        showSuccessToast("Login successful! Welcome back!");
+        showSuccessToast(data.message || "Login successful!");
         if (typeof onSuccess === "function") onSuccess();
         if(redirectPath && redirectPath !== "/"){
           navigate(redirectPath, {replace: true});
           setRedirectPath("/"); 
         }
       } else {
-        const err = await response.json();
+        const err = await response;
         const errorMsg = err.message || "Login failed";
         setMessage(errorMsg);
         showErrorToast(errorMsg);

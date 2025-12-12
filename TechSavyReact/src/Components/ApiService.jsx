@@ -1,5 +1,5 @@
 // src/services/apiService.js
-const basePath ='https://techsavyshopwebappapi20251209021032-emhtaxcue8dgdudm.southafricanorth-01.azurewebsites.net/api/TechSavy/';
+const basePath ='https://localhost:7272/api/TechSavy/';
 
 async function handleResponse(response) {
     if (!response.ok) {
