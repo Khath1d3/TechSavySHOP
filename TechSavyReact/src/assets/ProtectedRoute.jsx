@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
-import Modal from '../Components/modal';
-import Login from '../Components/login';
+import Modal from '../Components_test/modal';
+import Login from '../Components_test/login';
 
 export default function ProtectedRoute({ children }) {
   const { isLoggedIn } = useContext(AuthContext);

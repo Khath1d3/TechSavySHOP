@@ -1,12 +1,12 @@
 import React ,{useState, useEffect, useContext} from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../Components/Header";
-import Footer from "../../Components/Footer";
-import CartItem from "../../Components/CartItem";
+import Header from "../../Components_test/Header";
+import Footer from "../../Components_test/Footer";
+import CartItem from "../../Components_test/CartItem";
 import "./CartitemStyle.css";
 import {useLoader} from "../../assets/LoaderContext";
 import { AuthContext } from "../../assets/AuthContext";
-import {getData} from "../../Components/ApiService";
+import {getData} from "../../Components_test/ApiService";
 
 function CartPage() {
     const navigate = useNavigate();

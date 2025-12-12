@@ -1,15 +1,15 @@
 import React,{useEffect,useState} from "react";
 import { useLocation,Link, useNavigate, Routes, Route, Navigate } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
-import Header from "../../Components/Header";
-import Footer from "../../Components/Footer";
+import Header from "../../Components_test/Header";
+import Footer from "../../Components_test/Footer";
 import './AccountStyle.css'
-import Invoices from "../../Components/invoices"
-import Orders from "../../Components/Orders"
-import Reviews from "../../Components/Reviews"
-import PersonalDetails from "../../Components/personalDetails"
-import AddressBook from "../../Components/AddressBook"
-import SecuritySettings from "../../Components/SecuritySettings"
+import Invoices from "../../Components_test/invoices"
+import Orders from "../../Components_test/Orders"
+import Reviews from "../../Components_test/Reviews"
+import PersonalDetails from "../../Components_test/personalDetails"
+import AddressBook from "../../Components_test/AddressBook"
+import SecuritySettings from "../../Components_test/SecuritySettings"
 
 function Account() {
 

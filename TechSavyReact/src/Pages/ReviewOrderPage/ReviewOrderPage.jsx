@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Header from "../../Components/Header";
-import Footer from "../../Components/Footer";
-import Modal from "../../Components/modal";
-import { getData, postData } from "../../Components/ApiService";
+import Header from "../../Components_test/Header";
+import Footer from "../../Components_test/Footer";
+import Modal from "../../Components_test/modal";
+import { getData, postData } from "../../Components_test/ApiService";
 import { useLoader } from "../../assets/LoaderContext";
 import { useCart } from "../../assets/CartContext";
 import { AuthContext } from "../../assets/AuthContext";

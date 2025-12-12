@@ -1,16 +1,16 @@
 import React,{useState,useEffect,useContext} from "react";
 import { createPortal } from "react-dom";
-import Header from "../../Components/Header";
-import Footer from "../../Components/Footer";
-import Modal from "../../Components/modal";
-import Login from "../../Components/login";
+import Header from "../../Components_test/Header";
+import Footer from "../../Components_test/Footer";
+import Modal from "../../Components_test/modal";
+import Login from "../../Components_test/login";
 import { useParams } from "react-router-dom";
 import "./ViewItemStyle.css";
-import DeviceCard from "../../Components/DeviceCard";
+import DeviceCard from "../../Components_test/DeviceCard";
 import {useLoader} from "../../assets/LoaderContext";
 import { useCart } from "../../assets/CartContext";
 import { AuthContext } from "../../assets/AuthContext";
-import { getData, postData } from "../../Components/ApiService";
+import { getData, postData } from "../../Components_test/ApiService";
 
 
 function ViewItemPage() {

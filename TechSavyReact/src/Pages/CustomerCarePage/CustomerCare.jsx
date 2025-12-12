@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Header from "../../Components/Header";
-import Footer from "../../Components/Footer";
+import Header from "../../Components_test/Header";
+import Footer from "../../Components_test/Footer";
 import "./CustomerCareStyle.css";
 
 function CustomerCare() {
