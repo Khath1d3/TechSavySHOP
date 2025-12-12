@@ -23,7 +23,12 @@ function CartPage() {
             showLoader();
             try {
             const data = await getData(`CustomerCart`, {includeRelated: true});
-            setDevices(data.data);
+            if (data.success) {
+                setDevices(data.data || []);
+            } else {
+                setDevices([]);
+                setMessage(data.message || "No devices in the cart .");
+            }
             } catch (error) {
             console.error("Error fetching product:", error);
             setMessage("Error fetching product. Please try again later.");

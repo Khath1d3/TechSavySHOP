@@ -52,8 +52,8 @@ function CartItem({ productid,name, quantity, price, imageURL,Reload }) {
                         Qty:
                         <label htmlFor="quantity">{quantity}</label>
                     </div>
-                    <button className="cart-remove-btn" onClick={(e) => { e.stopPropagation(); Remove(); }}>Remove</button>
-                    <button className="move-to-list-btn" onClick={(e) => { e.stopPropagation(); Add(); }}>Add</button>
+                    <button className="cart-remove-btn" onClick={(e) => { e.stopPropagation(); Remove(); }}>-</button>
+                    <button className="move-to-list-btn" onClick={(e) => { e.stopPropagation(); Add(); }}>+</button>
                 </div>
             </div>
         </div>

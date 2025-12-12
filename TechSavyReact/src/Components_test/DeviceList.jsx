@@ -57,8 +57,11 @@ useEffect(() => {
     try {
       if (isLoggedIn) {
         const cartData = await getData("CustomerCart", { includeRelated: true });
-        if (cartData.success) {
+        if (cartData.data.success) {
           setCartItems(cartData.data || []);
+        }
+        else {
+          setCartItems([]);
         }
       }
     } catch (error) {
