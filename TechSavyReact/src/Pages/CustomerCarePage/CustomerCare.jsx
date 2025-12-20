@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { Helmet } from 'react-helmet-async';
 import Header from "../../Components_test/Header";
 import Footer from "../../Components_test/Footer";
 import "./CustomerCareStyle.css";
@@ -24,6 +25,11 @@ function CustomerCare() {
 
     return (
         <>
+            <Helmet>
+                <title>Customer Care - Help & Support | TechSavy</title>
+                <meta name="description" content="Get help with your TechSavy order. Contact information, FAQs, shipping details, returns policy, and customer support for all your tech shopping needs." />
+                <meta name="keywords" content="customer support, help center, contact TechSavy, shipping info, returns policy, FAQs" />
+            </Helmet>
             <Header />
             <div className="customercare-container">
                 <h1 className="customercare-title">Customer Care</h1>

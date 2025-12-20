@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { Helmet } from 'react-helmet-async';
 import Header from "../../Components_test/Header";
 import Footer from "../../Components_test/Footer";
 import "./AboutUsStyle.css";
@@ -24,6 +25,11 @@ function AboutUs() {
 
     return (
         <>
+            <Helmet>
+                <title>About TechSavy - Your Trusted Electronics Store in South Africa</title>
+                <meta name="description" content="Learn about TechSavy, South Africa's trusted online electronics store. Our mission is to provide quality tech products and excellent customer service." />
+                <meta name="keywords" content="about TechSavy, electronics store South Africa, tech company, our story" />
+            </Helmet>
             <Header />
             <div className="aboutus-container">
                 <h1 className="aboutus-title">About Us</h1>
