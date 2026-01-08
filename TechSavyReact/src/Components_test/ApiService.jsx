@@ -1,5 +1,5 @@
 // src/services/apiService.js
-const basePath ='http://khath1d3-001-site1.mtempurl.com/api/TechSavy/';
+const basePath ='https://khath1d3-001-site1.mtempurl.com/api/TechSavy/';
 
 async function handleResponse(response) {
     if (!response.ok) {
