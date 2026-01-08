@@ -14,20 +14,62 @@ function CartPage() {
     const [devices, setDevices] = useState([]);
     const { showLoader, hideLoader } = useLoader();
     const [message, setMessage] = useState("");
-      const fetchProduct = async () => {
-            if (!isLoggedIn) {
-                setDevices([]);
-                return;
-            }
+    
+    const fetchGuestCartDetails = async () => {
+        const guestCart = getGuestCart();
+        console.log("Guest cart from localStorage:", guestCart);    
+        if (guestCart.length === 0) {
+            setGuestCartDetails([]);
+            return;
+        }
+        
+        showLoader();
+        try {
+            // Fetch product details for each item in guest cart
+            console.log(guestCart);
+            const detailsPromises = guestCart.map(async (item) => {
+                try {
+                    const response = await getData(`GetProductsById/${item.productId}`);
+                    console.log('Product fetch response:', response);
+                    if (response.success || response.data) {
+                        const product = response.data || response;
+                        return {
+                            id: item.productId,
+                            ProductID: item.productId,
+                            Name: product.name || product.Name,
+                            Price: product.price || product.Price,
+                            ImageLink: product.imageLink || product.ImageLink,
+                            Quantity: item.quantity
+                        };
+                    }
+                } catch (error) {
+                    console.error(`Error fetching product ${item.productId}:`, error);
+                }
+                return null;
+            });
             
-            showLoader();
-            try {
+            const details = await Promise.all(detailsPromises);
+            setGuestCartDetails(details.filter(item => item !== null));
+        } catch (error) {
+            console.error("Error fetching guest cart details:", error);
+        } finally {
+            hideLoader();
+        }
+    };
+    
+    const fetchProduct = async () => {
+        if (!isLoggedIn) {
+            setDevices([]);
+            return;
+        }
+        showLoader();
+        try {
             const data = await getData(`CustomerCart`, {includeRelated: true});
             if (data.success) {
                 setDevices(data.data || []);
             } else {
                 setDevices([]);
-                setMessage(data.message || "No devices in the cart .");
+                setMessage(data.message || "No devices in the cart.");
             }
             } catch (error) {
             console.error("Error fetching product:", error);
@@ -45,7 +87,6 @@ function CartPage() {
         const qty = parseInt(d?.Quantity ?? d?.quantity ?? 1, 10) || 1;
         return sum + (isNaN(price) ? 0 : price) * qty;
     }, 0);
-    console.log("devices in cart",devices);
     return (
         <>
             <Header />

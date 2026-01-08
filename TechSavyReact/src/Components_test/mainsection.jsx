@@ -50,7 +50,6 @@ function MainSection() {
 
                 // Get recently viewed from localStorage
                 const recentIds = getRecentlyViewed();
-                console.log("Recent IDs from localStorage:", recentIds);
                 
                 if (recentIds.length > 0) {
                     // Filter products that match recently viewed IDs and maintain order
@@ -59,7 +58,6 @@ function MainSection() {
                         .filter(p => p !== undefined)
                         .slice(0, 3);
                     
-                    console.log("Recent products:", recentItems);
                     setRecentProducts(recentItems.length > 0 ? recentItems : getRandomProducts(products, 4));
                 } else {
                     // If no recent views, use random products

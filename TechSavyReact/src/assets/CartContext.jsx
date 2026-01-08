@@ -13,7 +13,7 @@ export const CartProvider = ({ children }) => {
             setCartCount(0);
             return;
         }
-
+        
         try {
             const response = await getData('GetCartItemCount');
             const count = response.data || response.count || 0;
