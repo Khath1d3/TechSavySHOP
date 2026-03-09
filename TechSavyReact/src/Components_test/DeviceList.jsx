@@ -30,7 +30,7 @@ useEffect(() => {
     try {
       showLoader();
       const data = await getData("Products");
-      const products = data.data;
+      const products = data.data || [];
       setDevices(products);
 
       // Get recently viewed from localStorage
@@ -111,7 +111,7 @@ useEffect(() => {
   const [priceRange, setPriceRange] = useState([0, 9999]);
 
   // Filter products based on the filters applied
-const filteredDevices = devices.filter((device) => {
+const filteredDevices = (devices || []).filter((device) => {
   const price = device.price;
   const matchesSearchQuery = device.name.toLowerCase().includes(searchQuery.toLowerCase());
   const matchesCategory = selectedCategory ? device.category === selectedCategory : true;
@@ -144,7 +144,7 @@ const currentDevices = sortedDevices.slice(indexOfFirstDevice, indexOfLastDevice
 
   // Get unique categories from devices
   const categories = Array.from(
-    new Set(devices.map((device) => device.category).filter(Boolean))
+    new Set((devices || []).map((device) => device.category).filter(Boolean))
   );
 console.log(currentDevices,"currentDevices");
   return (

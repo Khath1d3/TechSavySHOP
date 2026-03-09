@@ -1,5 +1,5 @@
 // src/services/apiService.js
-const basePath = "/api/";
+const basePath = "https://techsavy-api-6c5y.onrender.com/api/TechSavy/";
 
 async function handleResponse(response) {
     if (!response.ok) {
