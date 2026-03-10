@@ -1,14 +1,15 @@
 # Allow all search engines to crawl the site
 User-agent: *
 Allow: /
-Allow: /products
-Allow: /about
+Allow: /product
+Allow: /about-us
 Allow: /customer-care
+Allow: /viewitem/
 
-# Block private pages from being indexed
+# Block private/functional pages from being indexed
 Disallow: /account
 Disallow: /cart
 Disallow: /review-order
 
-# Sitemap location (update with your actual domain)
-Sitemap: https://yoursite.com/sitemap.xml
+# Sitemap location
+Sitemap: https://tech-savy-shop.vercel.app/sitemap.xml

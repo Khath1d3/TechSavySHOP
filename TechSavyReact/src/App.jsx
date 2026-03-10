@@ -1,5 +1,5 @@
 import './App.css'
-import {HashRouter as Router, Routes, Route} from 'react-router-dom'
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import LandingPage from './Pages/LandingPage/LandingPage.jsx'
 import Product from './Pages/ProductPage/ProductPage.jsx'
 import CartPage from './Pages/CartPage/CartPage.jsx'
