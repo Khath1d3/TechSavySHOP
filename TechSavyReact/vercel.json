@@ -3,23 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "http://khath1d3-001-site1.mtempurl.com/api/:path*"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ],
-  "headers": [
+    },
     {
       "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "index, follow"
-        }
-      ]
+      "destination": "/index.html"
     }
   ]
 }
