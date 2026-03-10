@@ -42,10 +42,10 @@ function ForgotPassword({ onBack }) {
 
     return (
         <>
-            <h2>Forgot Password</h2>
-            <p className="forgot-password-description">
-                Enter your email address and we'll send you a new password if an account exists.
-            </p>
+            <div className="modal-header">
+                <h2>Forgot Password</h2>
+                <p className="modal-subtitle">Enter your email to receive a new password</p>
+            </div>
             
             <form id="forgotPasswordForm" onSubmit={handleSubmit}>
                 <div className="password-container">
@@ -70,7 +70,14 @@ function ForgotPassword({ onBack }) {
                     className="btn forgot-password-btn"
                     disabled={isLoading}
                 >
-                    {isLoading ? "Sending..." : "Send New Password"}
+                    {isLoading ? (
+                        <span className="button-spinner">
+                            <span className="spinner"></span>
+                            Sending...
+                        </span>
+                    ) : (
+                        "Send New Password"
+                    )}
                 </button>
 
                 {message && (

@@ -7,6 +7,9 @@ import "./CartitemStyle.css";
 import {useLoader} from "../../assets/LoaderContext";
 import { AuthContext } from "../../assets/AuthContext";
 import {getData} from "../../Components_test/ApiService";
+import { getGuestCart } from "../../assets/CartContext";
+import Modal from "../../Components_test/modal";
+import Login from "../../Components_test/login";
 
 function CartPage() {
     const navigate = useNavigate();
@@ -14,52 +17,33 @@ function CartPage() {
     const [devices, setDevices] = useState([]);
     const { showLoader, hideLoader } = useLoader();
     const [message, setMessage] = useState("");
+    const [showLoginModal, setShowLoginModal] = useState(false);
     
     const fetchGuestCartDetails = async () => {
         const guestCart = getGuestCart();
         console.log("Guest cart from localStorage:", guestCart);    
         if (guestCart.length === 0) {
-            setGuestCartDetails([]);
+            setDevices([]);
             return;
         }
         
-        showLoader();
-        try {
-            // Fetch product details for each item in guest cart
-            console.log(guestCart);
-            const detailsPromises = guestCart.map(async (item) => {
-                try {
-                    const response = await getData(`GetProductsById/${item.productId}`);
-                    console.log('Product fetch response:', response);
-                    if (response.success || response.data) {
-                        const product = response.data || response;
-                        return {
-                            id: item.productId,
-                            ProductID: item.productId,
-                            Name: product.name || product.Name,
-                            Price: product.price || product.Price,
-                            ImageLink: product.imageLink || product.ImageLink,
-                            Quantity: item.quantity
-                        };
-                    }
-                } catch (error) {
-                    console.error(`Error fetching product ${item.productId}:`, error);
-                }
-                return null;
-            });
-            
-            const details = await Promise.all(detailsPromises);
-            setGuestCartDetails(details.filter(item => item !== null));
-        } catch (error) {
-            console.error("Error fetching guest cart details:", error);
-        } finally {
-            hideLoader();
-        }
+        // Map localStorage items directly without additional API calls
+        const cartItems = guestCart.map(item => ({
+            id: item.productId,
+            ProductID: item.productId,
+            Name: item.name,
+            Price: item.price,
+            ImageLink: item.imageLink,
+            Quantity: item.quantity,
+            isGuestItem: true
+        }));
+        
+        setDevices(cartItems);
     };
     
     const fetchProduct = async () => {
         if (!isLoggedIn) {
-            setDevices([]);
+            fetchGuestCartDetails();
             return;
         }
         showLoader();
@@ -87,6 +71,15 @@ function CartPage() {
         const qty = parseInt(d?.Quantity ?? d?.quantity ?? 1, 10) || 1;
         return sum + (isNaN(price) ? 0 : price) * qty;
     }, 0);
+    
+    const handleCheckout = () => {
+        if (!isLoggedIn) {
+            setShowLoginModal(true);
+            return;
+        }
+        navigate('/review-order');
+    };
+    
     return (
         <>
             <Header />
@@ -103,6 +96,7 @@ function CartPage() {
                             price={device.Price}
                             imageURL={device.ImageLink}
                             Reload={fetchProduct}
+                            isGuestItem={device.isGuestItem || false}
                         />
                     ))}
                 </div>
@@ -114,7 +108,7 @@ function CartPage() {
                         <p className="total-price">$ {totalPrice.toFixed(2)}</p>
                         <button 
                             className="checkout-btn" 
-                            onClick={() => navigate('/review-order')}
+                            onClick={handleCheckout}
                             disabled={devices.length === 0}
                         >
                             Proceed to Checkout
@@ -127,6 +121,15 @@ function CartPage() {
                     </div>
                 </div>
             </div>
+            
+            {/* Login Modal */}
+            <Modal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)}>
+                <Login onSuccess={() => {
+                    setShowLoginModal(false);
+                    navigate('/review-order');
+                }} />
+            </Modal>
+            
             <Footer />
         </>
     );

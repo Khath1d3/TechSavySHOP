@@ -42,7 +42,7 @@ function App() {
           <Routes>
             <Route path='/' element={<LandingPage/>} />
             <Route path='/product' element={<Product/>} />
-            <Route path='/cart' element={<ProtectedRoute><CartPage/></ProtectedRoute>} />
+            <Route path='/cart' element={<CartPage/>} />
             <Route path='/viewitem/:id' element={<ViewItemPage/>} />
             <Route path='/review-order' element={<ProtectedRoute><ReviewOrderPage/></ProtectedRoute>} />
             <Route path='/account/*' element={<ProtectedRoute><Account/></ProtectedRoute>} />

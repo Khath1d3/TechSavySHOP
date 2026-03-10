@@ -11,6 +11,7 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { login, redirectPath, setRedirectPath } = useContext(AuthContext);
   const navigate = useNavigate();
   const { showLoader, hideLoader } = useLoader();
@@ -44,6 +45,9 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Prevent double submission
+    if (isLoading) return;
+    
     const newErrors = {};
     
     // Validate email
@@ -65,6 +69,7 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
       return;
     }
     
+    setIsLoading(true);
     showLoader();
     try {
       const response = await postData("Login", formData);
@@ -72,6 +77,9 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
       if (response.success) {
         const data = await response;
         await login(data.token);
+        
+        // Guest cart sync now happens automatically in CartContext
+        
         showSuccessToast(data.message || "Login successful!");
         if (typeof onSuccess === "function") onSuccess();
         if(redirectPath && redirectPath !== "/"){
@@ -91,12 +99,16 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
       console.error("Login error:", error);
     } finally {
       hideLoader();
+      setIsLoading(false);
     }
   };
 
   return (
     <>
-      <h2>Login</h2>
+      <div className="modal-header">
+        <h2>Welcome Back!</h2>
+        <p className="modal-subtitle">Sign in to continue shopping</p>
+      </div>
       <form id="loginForm" onSubmit={handleSubmit}>
         <div className="password-container">
           <label htmlFor="loginEmail">Email:</label>
@@ -108,6 +120,7 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
             value={formData.email}
             onChange={handleChange}
             required
+            disabled={isLoading}
           />
           </span>
           {errors.email && <span className="error-message">{errors.email}</span>}
@@ -122,12 +135,14 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
               value={formData.password}
               onChange={handleChange}
               required
+              disabled={isLoading}
             />
             <button
               type="button"
               className="password-toggle-btn"
               onClick={togglePasswordVisibility}
               aria-label={showPassword ? "Hide password" : "Show password"}
+              disabled={isLoading}
             >
               {showPassword ? "👁️" : "👁️‍🗨️"}
             </button>
@@ -135,8 +150,15 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
           {errors.password && <span className="error-message">{errors.password}</span>}
         </div>
         
-        <button type="submit" className="btn login-btn">
-          Login
+        <button type="submit" className="btn login-btn" disabled={isLoading}>
+          {isLoading ? (
+            <span className="button-spinner">
+              <span className="spinner"></span>
+              Logging in...
+            </span>
+          ) : (
+            "Login"
+          )}
         </button>
         
         {message && <p className="error-message">{message}</p>}
@@ -146,6 +168,7 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
             type="button"
             className="forgot-password-link"
             onClick={handleForgotPassword}
+            disabled={isLoading}
           >
             Forgot Password?
           </button>
@@ -156,6 +179,7 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
               type="button"
               className="signup-link-btn"
               onClick={handleSwitchToSignup}
+              disabled={isLoading}
             >
               Sign Up
             </button>

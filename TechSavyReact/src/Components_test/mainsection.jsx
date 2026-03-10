@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DeviceCard from "./DeviceCard";
 import { getData } from "./ApiService";
 import { useLoader } from "../assets/LoaderContext";
 
 function MainSection() {
+    const navigate = useNavigate();
     const { showLoader, hideLoader } = useLoader();
     const [devices, setDevices] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
@@ -14,6 +16,7 @@ function MainSection() {
     const [activeCategory, setActiveCategory] = useState('recent');
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
+    const [scrollY, setScrollY] = useState(0);
     const cardsPerPage = 4;
 
     // Get random products from array
@@ -32,6 +35,24 @@ function MainSection() {
             return [];
         }
     };
+
+    // Smooth parallax scroll effect with requestAnimationFrame
+    useEffect(() => {
+        let ticking = false;
+        
+        const handleScroll = () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    setScrollY(window.scrollY);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+        
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -124,9 +145,15 @@ function MainSection() {
         <>
             <main className="landing-main">
                 <section className="landing-hero">
+                    <div 
+                        className="hero-background" 
+                        style={{ transform: `translateY(${scrollY * 0.3}px)` }}
+                    ></div>
+                    <div className="hero-gradient-overlay"></div>
                     <div className="landing-side-details">
-                        <h1>New Collection Coming to Town</h1>
-                        <p>Introducing fashionable & gorgeous iMac: From design to simple use</p>
+                        <h1 className="hero-title-animated">New Collection Coming to Town</h1>
+                        <p className="hero-subtitle-animated">Introducing fashionable & gorgeous iMac: From design to simple use</p>
+                        <button className="hero-shop-btn" onClick={() => navigate('/product')}>Shop Now →</button>
                     </div>
                 </section>
 

@@ -9,7 +9,6 @@ import { AuthContext } from "../assets/AuthContext";
 import { useCart } from "../assets/CartContext";
 import { FaUser, FaBars, FaTimes } from "react-icons/fa";
 import {useLoader} from "../assets/LoaderContext";
-import ProtectedLink from "../assets/ProtectedLink";
 
 function Header({ isLandingPage = false }){
 const {isLoggedIn,logout,userData}=useContext(AuthContext);
@@ -116,18 +115,18 @@ useEffect(() => {
                             <a className="landing-nav-link active">
                                 <span className="landing-cart-link">
                                     <img src="/images/cart.png" alt="Cart" className="landing-cart-icon" />
-                                    {isLoggedIn && cartCount > 0 && <span className="landing-cart-count">{cartCount}</span>}
+                                    {cartCount > 0 && <span className="landing-cart-count">{cartCount}</span>}
                                 </span>
                                 Cart
                             </a>
                         ) : (
-                            <ProtectedLink className="landing-item" to="/Cart">
+                            <Link className="landing-item" to="/Cart">
                                 <span className="landing-cart-link">
                                     <img src="/images/cart.png" alt="Cart" className="landing-cart-icon" />
-                                    {isLoggedIn && cartCount > 0 && <span className="landing-cart-count">{cartCount}</span>}
+                                    {cartCount > 0 && <span className="landing-cart-count">{cartCount}</span>}
                                 </span>
                                 Cart
-                            </ProtectedLink>
+                            </Link>
                         )}
                     </li>
                     {isLoggedIn ? (

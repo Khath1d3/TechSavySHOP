@@ -1,19 +1,16 @@
 import react from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import { createPortal } from "react-dom";
 import { postData } from "./ApiService";
 import { AuthContext } from "../assets/AuthContext";
 import { useCart } from "../assets/CartContext";
-import Modal from "./modal";
-import Login from "./login";
+import { addToGuestCart } from "../assets/CartContext";
 
 function DeviceCard({ id, name, category, price, originalPrice, imageURL, rating, isOnSale }) {
     const navigate = useNavigate();
     const { isLoggedIn } = useContext(AuthContext);
     const { updateCartCount } = useCart();
     const [loading, setLoading] = useState(false);
-    const [showLoginModal, setShowLoginModal] = useState(false);
     const [addedToCart, setAddedToCart] = useState(false);
     
     const handleClick = () => {
@@ -34,6 +31,17 @@ function DeviceCard({ id, name, category, price, originalPrice, imageURL, rating
         localStorage.setItem("recentlyViewed", JSON.stringify(viewed));
     }
     const handleAddToCart = async () => {
+        if (!isLoggedIn) {
+            // Add to localStorage for guest users with full product details
+            const productId = parseInt(id, 10);
+            addToGuestCart(productId, 1, { name, price, imageLink: imageURL });
+            updateCartCount(); // Update cart count from localStorage
+            setAddedToCart(true);
+            setTimeout(() => setAddedToCart(false), 2000);
+            return;
+        }
+        
+        // For logged-in users, add to server
         try {
             const productId = parseInt(id, 10);
             await postData('AddToCart', productId);
@@ -49,23 +57,6 @@ function DeviceCard({ id, name, category, price, originalPrice, imageURL, rating
     const handleAddClick = async (e) => {
         e.stopPropagation();
         
-        if (!isLoggedIn) {
-            setShowLoginModal(true);
-            return;
-        }
-
-        try {
-            setLoading(true);
-            await handleAddToCart();
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleLoginSuccess = async () => {
-          console.log('Login success called, closing modal'); // Add this
-
-        setShowLoginModal(false);
         try {
             setLoading(true);
             await handleAddToCart();
@@ -109,14 +100,6 @@ function DeviceCard({ id, name, category, price, originalPrice, imageURL, rating
                     </div>
                 )}
             </div>
-
-            {/* Render modal using portal to document.body */}
-            {showLoginModal && createPortal(
-                <Modal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)}>
-                    <Login onSuccess={handleLoginSuccess} />
-                </Modal>,
-                document.body
-            )}
         </>
     );
 }

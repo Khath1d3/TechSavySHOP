@@ -1,9 +1,7 @@
 import React,{useState,useEffect,useContext} from "react";
-import { createPortal } from "react-dom";
 import Header from "../../Components_test/Header";
 import Footer from "../../Components_test/Footer";
 import Modal from "../../Components_test/modal";
-import Login from "../../Components_test/login";
 import { useParams } from "react-router-dom";
 import "./ViewItemStyle.css";
 import DeviceCard from "../../Components_test/DeviceCard";
@@ -11,6 +9,7 @@ import {useLoader} from "../../assets/LoaderContext";
 import { useCart } from "../../assets/CartContext";
 import { AuthContext } from "../../assets/AuthContext";
 import { getData, postData } from "../../Components_test/ApiService";
+import { getGuestCart, addToGuestCart, removeFromGuestCart } from "../../assets/CartContext";
 
 
 function ViewItemPage() {
@@ -27,7 +26,6 @@ function ViewItemPage() {
       const [selectedStarFilter, setSelectedStarFilter] = useState(0);
       const [isInCart, setIsInCart] = useState(false);
       const [addedToCart, setAddedToCart] = useState(false);
-      const [showLoginModal, setShowLoginModal] = useState(false);
 
       const filteredReviews = selectedStarFilter === 0 
           ? productReviews 
@@ -96,7 +94,10 @@ useEffect(() => {
 useEffect(() => {
   const checkCart = async () => {
     if (!isLoggedIn) {
-      setIsInCart(false);
+      // Check localStorage for guest users
+      const guestCart = getGuestCart();
+      const inCart = guestCart.some(item => item.productId === parseInt(id));
+      setIsInCart(inCart);
       return;
     }
     
@@ -117,7 +118,16 @@ useEffect(() => {
 
 const handleAddToCart = async () => {
   if (!isLoggedIn) {
-    setShowLoginModal(true);
+    // Add to localStorage for guest users with full product details
+    addToGuestCart(parseInt(id), 1, {
+      name: product.name,
+      price: product.price,
+      imageLink: product.imageLink
+    });
+    setIsInCart(true);
+    updateCartCount();
+    setAddedToCart(true);
+    setTimeout(() => setAddedToCart(false), 2000);
     return;
   }
   
@@ -138,7 +148,10 @@ const handleAddToCart = async () => {
 
 const handleRemoveFromCart = async () => {
   if (!isLoggedIn) {
-    setShowLoginModal(true);
+    // Remove from localStorage for guest users
+    removeFromGuestCart(parseInt(id));
+    setIsInCart(false);
+    updateCartCount();
     return;
   }
   
@@ -277,14 +290,6 @@ const handleRemoveFromCart = async () => {
                 </div>
             </div>
         </Modal>
-
-        {/* Login Modal Portal */}
-        {showLoginModal && createPortal(
-            <Modal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)}>
-                <Login onSuccess={() => setShowLoginModal(false)} />
-            </Modal>,
-            document.body
-        )}
 
         <Footer />
 

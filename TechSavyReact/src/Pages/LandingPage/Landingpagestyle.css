@@ -79,9 +79,6 @@ nav {
     font-size: 1rem;
     cursor: pointer;
 }
-.landing-side-details {
-    width: fit-content;
-}
 
 /* Navigation Links Style */
 nav ul {
@@ -173,13 +170,112 @@ nav ul li .landing-item:hover::after {
     color: #fff;
     text-align: center;
     padding: 50px 20px;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Parallax Background */
+.hero-background {
+    position: absolute;
+    top: -50px;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 100px);
     background-image: url('/images/01-1-1.jpg');
     background-size: cover;
     background-position: center bottom;
     background-repeat: no-repeat;
-    height: 60vh;
-    display: flex;
-    align-items: center;
+    z-index: 0;
+    will-change: transform;
+    transition: transform 0.1s ease-out;
+}
+
+/* Subtle Static Gradient Overlay */
+.hero-gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.3) 0%,
+        transparent 50%,
+        rgba(0, 128, 0, 0.2) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Animated Text */
+.landing-side-details {
+    position: relative;
+    z-index: 2;
+    width: fit-content;
+}
+
+.hero-title-animated {
+    animation: slideUpFadeIn 1s ease-out forwards, floatBounce 3s ease-in-out 1s infinite;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.hero-subtitle-animated {
+    animation: slideUpFadeIn 1s ease-out 0.3s forwards;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.hero-shop-btn {
+    margin-top: 20px;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #4b6b4b, green);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 128, 0, 0.4);
+    animation: slideUpFadeIn 1s ease-out 0.6s forwards, pulse 2s ease-in-out 1.6s infinite;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.3s ease;
+}
+
+.hero-shop-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 128, 0, 0.6);
+    background: linear-gradient(135deg, green, #4b6b4b);
+}
+
+/* Animations */
+@keyframes slideUpFadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes floatBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(0, 128, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 4px 25px rgba(0, 128, 0, 0.7);
+    }
 }
 
 

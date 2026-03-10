@@ -7,6 +7,7 @@ import {useLoader} from "../assets/LoaderContext";
 import { AuthContext } from "../assets/AuthContext";
 import { useCart } from "../assets/CartContext";
 import {getData,postData} from "./ApiService";
+import { getGuestCart } from "../assets/CartContext";
 
 function DeviceList() {
   const navigate = useNavigate();
@@ -21,9 +22,18 @@ function DeviceList() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [recentlyViewedProducts, setRecentlyViewedProducts] = useState([]);
-
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 968);
 
   const itemsPerPage = 9;
+
+  // Detect mobile screen size
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 968);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
 useEffect(() => {
   const GetProduct = async () => {
@@ -63,6 +73,21 @@ useEffect(() => {
         else {
           setCartItems([]);
         }
+      } else {
+        // For guest users, load cart from localStorage - already has full details
+        const guestCart = getGuestCart();
+        if (guestCart.length > 0) {
+          const cartItems = guestCart.map(item => ({
+            ProductID: item.productId,
+            Name: item.name,
+            Price: item.price,
+            ImageLink: item.imageLink,
+            Quantity: item.quantity
+          }));
+          setCartItems(cartItems);
+        } else {
+          setCartItems([]);
+        }
       }
     } catch (error) {
       // Cart is empty or not found - this is fine, just set empty array
@@ -87,6 +112,21 @@ useEffect(() => {
         if (cartData.success) {
           setCartItems(cartData.data || []);
         }
+      } else {
+        // For guest users, load cart from localStorage - already has full details
+        const guestCart = getGuestCart();
+        if (guestCart.length > 0) {
+          const cartItems = guestCart.map(item => ({
+            ProductID: item.productId,
+            Name: item.name,
+            Price: item.price,
+            ImageLink: item.imageLink,
+            Quantity: item.quantity
+          }));
+          setCartItems(cartItems);
+        } else {
+          setCartItems([]);
+        }
       }
     } catch (error) {
       // Cart is empty or not found - this is fine, just set empty array
@@ -98,9 +138,7 @@ useEffect(() => {
     }
   };
 
-  if (isLoggedIn) {
-    GetCart();
-  }
+  GetCart();
 }, [cartCount, isLoggedIn]);
 
   const indexOfLastDevice = currentPage * itemsPerPage;
@@ -146,6 +184,21 @@ const currentDevices = sortedDevices.slice(indexOfFirstDevice, indexOfLastDevice
   const categories = Array.from(
     new Set((devices || []).map((device) => device.category).filter(Boolean))
   );
+
+  // Check if filters are active
+  const areFiltersActive = searchQuery !== "" || selectedCategory !== "" || priceRange[1] !== 9999;
+
+  // Group devices by category for mobile view
+  const devicesByCategory = categories.reduce((acc, category) => {
+    acc[category] = sortedDevices.filter(device => device.category === category).slice(0, 5);
+    return acc;
+  }, {});
+
+  // Handle "View More" click
+  const handleViewMore = (category) => {
+    setSelectedCategory(category);
+  };
+
 console.log(currentDevices,"currentDevices");
   return (
     <div className="shop-container">
@@ -159,6 +212,20 @@ console.log(currentDevices,"currentDevices");
 
         <div className="product-grid">
             <h1>Shop</h1>
+            
+            {/* Category Filter Indicator */}
+            {selectedCategory && (
+              <div className="category-filter-indicator">
+                <span>Viewing: <strong>{selectedCategory}</strong></span>
+                <button 
+                  className="clear-category-btn"
+                  onClick={() => setSelectedCategory("")}
+                >
+                  ✕ Clear Filter
+                </button>
+              </div>
+            )}
+            
             <div className="sorting">
                 <div className="sort-by">
                     <label htmlFor="sort">Default sorting</label>
@@ -172,80 +239,128 @@ console.log(currentDevices,"currentDevices");
                         <option value="price-high">Price: High to Low</option>
                     </select>
                 </div>
-                <div id="product-info">
-            Showing {indexOfFirstDevice + 1}–{Math.min(indexOfLastDevice, filteredDevices.length)} of {filteredDevices.length} results
-                 </div>
+                {/* Only show product info when not in category-separated view */}
+                {(!isMobile || areFiltersActive) && (
+                  <div id="product-info">
+                    Showing {indexOfFirstDevice + 1}–{Math.min(indexOfLastDevice, filteredDevices.length)} of {filteredDevices.length} results
+                  </div>
+                )}
             </div>
-        <div id="products" className="products">
-            {currentDevices.length > 0 ? (
-              currentDevices.map((device) => (
-                <DeviceCard
-                  key={device.productID}
-                  id={device.productID}
-                  name={device.name}
-                  category={device.category}
-                  price={device.price}
-                  originalPrice={device.originalPrice}
-                  isOnSale={device.isOnSale}
-                  imageURL={device.imageLink}
-                  rating={device.rating}
-                />
-              ))
-            ) : (
-              <p>No products available</p>
-            )}
-        </div>
-       <div id="pagination" className="product-pagination">
-  {/* Prev Button */}
-  <a
-    href="#"
-    onClick={(e) => {
-      e.preventDefault();
-      if (currentPage > 1) paginate(currentPage - 1);
-    }}
-    className={`pagination-link ${currentPage === 1 ? "disabled" : ""}`}
-  >
-    Prev
-  </a>
 
-  {/* Current Page */}
-  <a
-    href="#"
-    onClick={(e) => {
-      e.preventDefault();
-      paginate(currentPage);
-    }}
-    className="product-pagination-link active"
-  >
-    {currentPage}
-  </a>
+        {/* Conditional rendering: Category view for mobile without filters, Grid view otherwise */}
+        {isMobile && !areFiltersActive ? (
+          // Mobile Category-Separated View
+          <div className="category-sections">
+            {categories.map((category) => {
+              const categoryDevices = devicesByCategory[category];
+              if (!categoryDevices || categoryDevices.length === 0) return null;
+              
+              return (
+                <div key={category} className="category-section">
+                  <div className="category-header">
+                    <h2 className="category-name">{category}</h2>
+                    <button 
+                      className="view-more-btn"
+                      onClick={() => handleViewMore(category)}
+                    >
+                      View More
+                    </button>
+                  </div>
+                  <div className="category-divider"></div>
+                  <div className="category-products-scroll">
+                    {categoryDevices.map((device) => (
+                      <DeviceCard
+                        key={device.productID}
+                        id={device.productID}
+                        name={device.name}
+                        category={device.category}
+                        price={device.price}
+                        originalPrice={device.originalPrice}
+                        isOnSale={device.isOnSale}
+                        imageURL={device.imageLink}
+                        rating={device.rating}
+                      />
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          // Normal Grid View with Pagination
+          <>
+            <div id="products" className="products">
+                {currentDevices.length > 0 ? (
+                  currentDevices.map((device) => (
+                    <DeviceCard
+                      key={device.productID}
+                      id={device.productID}
+                      name={device.name}
+                      category={device.category}
+                      price={device.price}
+                      originalPrice={device.originalPrice}
+                      isOnSale={device.isOnSale}
+                      imageURL={device.imageLink}
+                      rating={device.rating}
+                    />
+                  ))
+                ) : (
+                  <p>No products available</p>
+                )}
+            </div>
+            <div id="pagination" className="product-pagination">
+              {/* Prev Button */}
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (currentPage > 1) paginate(currentPage - 1);
+                }}
+                className={`pagination-link ${currentPage === 1 ? "disabled" : ""}`}
+              >
+                Prev
+              </a>
 
-  {/* Next Page (if available) */}
-  {currentPage + 1 <= totalPages && (
-    <a
-      href="#"
-      onClick={(e) => {
-        e.preventDefault();
-        paginate(currentPage + 1);
-      }}
-      className="product-pagination-link"
-    >
-      {currentPage + 1}
-    </a>
-  )}
+              {/* Current Page */}
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  paginate(currentPage);
+                }}
+                className="product-pagination-link active"
+              >
+                {currentPage}
+              </a>
 
-  {/* Next Button */}
-  <a
-    href="#"
-    onClick={(e) => {
-      e.preventDefault();
-      if (currentPage < totalPages) paginate(currentPage + 1);
-    }}
-    className={`pagination-link ${currentPage === totalPages ? "disabled" : ""}`}
-  >
-    Next
-  </a>
-</div>
+              {/* Next Page (if available) */}
+              {currentPage + 1 <= totalPages && (
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    paginate(currentPage + 1);
+                  }}
+                  className="product-pagination-link"
+                >
+                  {currentPage + 1}
+                </a>
+              )}
+
+              {/* Next Button */}
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (currentPage < totalPages) paginate(currentPage + 1);
+                }}
+                className={`pagination-link ${currentPage === totalPages ? "disabled" : ""}`}
+              >
+                Next
+              </a>
+            </div>
+          </>
+        )}
      </div>
 
     <aside className={`product-filters ${isFilterOpen ? 'product-filter-open' : ''}`}>
@@ -298,7 +413,7 @@ console.log(currentDevices,"currentDevices");
                                     <img src={item.ImageLink} alt={item.Name} />
                                     <div className="cart-item-info">
                                         <p className="cart-item-name">{item.Name}</p>
-                                        <p className="cart-item-price">${item.Price.toFixed(2)} x {item.Quantity}</p>
+                                        <p className="cart-item-price">${(item.Price || 0).toFixed(2)} x {item.Quantity}</p>
                                     </div>
                                 </div>
                             ))}

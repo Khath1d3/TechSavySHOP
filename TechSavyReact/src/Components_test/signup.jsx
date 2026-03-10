@@ -22,6 +22,7 @@ function Signup({ onSwitchToLogin, onSuccess }) {
   });
   
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   
   const handleSwitchToLogin = () => {
     if (typeof onSwitchToLogin === "function") {
@@ -53,6 +54,9 @@ function Signup({ onSwitchToLogin, onSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Prevent double submission
+    if (isLoading) return;
     
     const newErrors = {};
     
@@ -107,6 +111,7 @@ function Signup({ onSwitchToLogin, onSuccess }) {
     const requestData = { ...formData };
     delete requestData.confirmPassword;
 
+    setIsLoading(true);
     try {
       const response = await postData("register", requestData);
       if (response.success) {
@@ -136,12 +141,17 @@ function Signup({ onSwitchToLogin, onSuccess }) {
     } catch (error) {
       showErrorToast(error.message || "Registration failed");
       setMessage(`Error: ${error.message || "Registration failed"}`);
+    } finally {
+      setIsLoading(false);
     }
   };
   
   return (
     <>
-      <h2>Sign Up</h2>
+      <div className="modal-header">
+        <h2>Create Account</h2>
+        <p className="modal-subtitle">Join TechSavy and start shopping today</p>
+      </div>
       <form id="signupForm" onSubmit={handleSubmit}>
         <div className="password-container">
           <label htmlFor="firstName">First Name:</label>
@@ -154,6 +164,7 @@ function Signup({ onSwitchToLogin, onSuccess }) {
               value={formData.firstName}
               onChange={handleChange}
               required
+              disabled={isLoading}
             />
           </span>
           {errors.firstName && <span className="error-message">{errors.firstName}</span>}
@@ -170,6 +181,7 @@ function Signup({ onSwitchToLogin, onSuccess }) {
               value={formData.lastName}
               onChange={handleChange}
               required
+              disabled={isLoading}
             />
           </span>
           {errors.lastName && <span className="error-message">{errors.lastName}</span>}
@@ -186,6 +198,7 @@ function Signup({ onSwitchToLogin, onSuccess }) {
               value={formData.email}
               onChange={handleChange}
               required
+              disabled={isLoading}
             />
           </span>
           {errors.email && <span className="error-message">{errors.email}</span>}
@@ -202,6 +215,7 @@ function Signup({ onSwitchToLogin, onSuccess }) {
               value={formData.phoneNumber}
               onChange={handleChange}
               required
+              disabled={isLoading}
             />
           </span>
           {errors.phoneNumber && <span className="error-message">{errors.phoneNumber}</span>}
@@ -218,6 +232,7 @@ function Signup({ onSwitchToLogin, onSuccess }) {
               value={formData.idNumber}
               onChange={handleChange}
               required
+              disabled={isLoading}
             />
           </span>
           {errors.idNumber && <span className="error-message">{errors.idNumber}</span>}
@@ -234,12 +249,14 @@ function Signup({ onSwitchToLogin, onSuccess }) {
               value={formData.password}
               onChange={handleChange}
               required
+              disabled={isLoading}
             />
             <button
               type="button"
               className="password-toggle-btn"
               onClick={() => togglePasswordVisibility('password')}
               aria-label={showPassword ? "Hide password" : "Show password"}
+              disabled={isLoading}
             >
               {showPassword ? "👁️" : "👁️‍🗨️"}
             </button>
@@ -258,12 +275,14 @@ function Signup({ onSwitchToLogin, onSuccess }) {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
+              disabled={isLoading}
             />
             <button
               type="button"
               className="password-toggle-btn"
               onClick={() => togglePasswordVisibility('confirmPassword')}
               aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+              disabled={isLoading}
             >
               {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
             </button>
@@ -271,7 +290,16 @@ function Signup({ onSwitchToLogin, onSuccess }) {
           {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
         </div>
 
-        <button type="submit" className="btn">Register</button>
+        <button type="submit" className="btn signup-btn" disabled={isLoading}>
+          {isLoading ? (
+            <span className="button-spinner">
+              <span className="spinner"></span>
+              Creating account...
+            </span>
+          ) : (
+            "Register"
+          )}
+        </button>
         <p>{message}</p>
       </form>
       <div className="login-option">
@@ -280,6 +308,7 @@ function Signup({ onSwitchToLogin, onSuccess }) {
           type="button"
           className="login-link-btn"
           onClick={handleSwitchToLogin}
+          disabled={isLoading}
         >
           Log In
         </button>
