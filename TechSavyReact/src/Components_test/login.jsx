@@ -74,26 +74,20 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
     try {
       const response = await postData("Login", formData);
       console.log("Login response:", response);
-      if (response.success) {
-        const data = await response;
-        await login(data.token);
-        
-        // Guest cart sync now happens automatically in CartContext
-        
-        showSuccessToast(data.message || "Login successful!");
-        if (typeof onSuccess === "function") onSuccess();
-        if(redirectPath && redirectPath !== "/"){
-          navigate(redirectPath, {replace: true});
-          setRedirectPath("/"); 
-        }
-      } else {
-        const err = await response;
-        const errorMsg = err.message || "Login failed";
-        setMessage(errorMsg);
-        showErrorToast(errorMsg);
+      
+      // Login returns { success: true, token, firstName, lastName, message } directly
+      await login(response.token);
+      
+      // Guest cart sync now happens automatically in CartContext
+      
+      showSuccessToast(response.message || "Login successful!");
+      if (typeof onSuccess === "function") onSuccess();
+      if(redirectPath && redirectPath !== "/"){
+        navigate(redirectPath, {replace: true});
+        setRedirectPath("/"); 
       }
     } catch (error) {
-      const errorMsg = "Login failed. Please try again.";
+      const errorMsg = error.message || "Login failed. Please try again.";
       setMessage(errorMsg);
       showErrorToast(errorMsg);
       console.error("Login error:", error);

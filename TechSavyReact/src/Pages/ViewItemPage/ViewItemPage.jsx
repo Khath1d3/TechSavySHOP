@@ -37,10 +37,10 @@ useEffect(() => {
     try {
       const response = await getData(`GetProductsById/${id}?includeRelated=true`);
       console.log("response",response);
-      if (response.success) {
-        const data = await response.data;
-        setProduct(data.product);
-        setRelated(data.relatedProducts || []);
+      // API returns { success: true, data: { Product: {...}, RelatedProducts: [...] } }
+      const data = response.data;
+      setProduct(data.Product);
+      setRelated(data.RelatedProducts || []);
         
         // Save to recently viewed in localStorage
         try {
@@ -57,10 +57,6 @@ useEffect(() => {
         } catch (storageError) {
           console.error("Error saving to recently viewed:", storageError);
         }
-      } else {
-        const err = await response.json();
-        setMessage(`Error: ${err.message || "Failed to load product"}`);
-      }
     } catch (error) {
       console.error("Error fetching product:", error);
       setMessage("Error fetching product. Please try again later.");
@@ -103,11 +99,10 @@ useEffect(() => {
     
     try {
       const response = await getData("CustomerCart", { includeRelated: true });
-      if (response.success) {
-        const cartItems = response.data;
-        const inCart = cartItems.some(item => item.ProductID === parseInt(id));
-        setIsInCart(inCart);
-      }
+      // API returns { success: true, data: [...] }
+      const cartItems = response.data || [];
+      const inCart = cartItems.some(item => item.ProductID === parseInt(id));
+      setIsInCart(inCart);
     } catch (error) {
       console.error("Error checking cart:", error);
     }

@@ -67,12 +67,8 @@ useEffect(() => {
     try {
       if (isLoggedIn) {
         const cartData = await getData("CustomerCart", { includeRelated: true });
-        if (cartData.data.success) {
-          setCartItems(cartData.data || []);
-        }
-        else {
-          setCartItems([]);
-        }
+        // API returns { success: true, data: [...] }
+        setCartItems(cartData.data || []);
       } else {
         // For guest users, load cart from localStorage - already has full details
         const guestCart = getGuestCart();
@@ -109,9 +105,8 @@ useEffect(() => {
     try {
       if (isLoggedIn) {
         const cartData = await getData("CustomerCart", { includeRelated: true });
-        if (cartData.success) {
-          setCartItems(cartData.data || []);
-        }
+        // API returns { success: true, data: [...] }
+        setCartItems(cartData.data || []);
       } else {
         // For guest users, load cart from localStorage - already has full details
         const guestCart = getGuestCart();

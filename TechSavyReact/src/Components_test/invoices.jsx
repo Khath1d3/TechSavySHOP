@@ -14,9 +14,8 @@ function Invoices() {
             try {
                 const response = await getData("GetInvoice");
                 console.log("Fetched invoices:", response);
-                if (response.success) {
-                    setInvoices(response.data);
-                }
+                // API returns { success: true, data: [...] }
+                setInvoices(response.data || []);
             } catch (error) {
                 console.error("Error fetching invoices:", error);
             } finally {
@@ -42,11 +41,15 @@ function Invoices() {
     </div>
         
     <div className="invoice-list">
-       {invoices.map((invoice) => (
-        <InvoiceCard
-         key={invoice.orderID}
-         invoice={invoice} />
-       ))}
+       {invoices.length > 0 ? (
+         invoices.map((invoice) => (
+          <InvoiceCard
+           key={invoice.orderID}
+           invoice={invoice} />
+         ))
+       ) : (
+         <p className="no-invoices">No invoices found</p>
+       )}
     </div>
     </div>
 

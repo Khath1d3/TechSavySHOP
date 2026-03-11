@@ -66,11 +66,10 @@ function ReviewOrderPage() {
     const fetchAddresses = async () => {
         try {
             const response = await getData("GetUserAddress");
-            if (response.success) {
-                setAddresses(response.data || []);
-                const selected = response.data.find(addr => addr.isSelected);
-                setSelectedAddress(selected);
-            }
+            // API returns { success: true, data: [...] }
+            setAddresses(response.data || []);
+            const selected = (response.data || []).find(addr => addr.isSelected);
+            setSelectedAddress(selected);
         } catch (error) {
             console.error("Error fetching addresses:", error);
         }
@@ -78,12 +77,11 @@ function ReviewOrderPage() {
      const fetchPaymentMethods = async () => {
         try {
             const response = await getData("GetPaymentDetails");
-            if (response.success) {
-                setPaymentMethods(response.data || []);
-                // Set first payment method as default
-                if (response.data && response.data.length > 0) {
-                    setSelectedPaymentId(response.data[0].paymentID || response.data[0].paymentId);
-                }
+            // API returns { success: true, data: [...] }
+            setPaymentMethods(response.data || []);
+            // Set first payment method as default
+            if (response.data && response.data.length > 0) {
+                setSelectedPaymentId(response.data[0].paymentID || response.data[0].paymentId);
             }
         } catch (error) {
             console.error("Error fetching payment methods:", error);
@@ -123,10 +121,9 @@ function ReviewOrderPage() {
     const handleChangeAddress = async (addressId) => {
         try {
             const response = await postData("ChangeisSelectedAddress", { addressid: addressId });
-            if (response.success) {
-                await fetchAddresses();
-                setShowAddressModal(false);
-            }
+            // Returns { success: true, message: "..." }
+            await fetchAddresses();
+            setShowAddressModal(false);
         } catch (error) {
             console.error("Error changing address:", error);
         }
@@ -143,15 +140,12 @@ function ReviewOrderPage() {
             showLoader();
             setAddressFormError("");
             const response = await postData("AddAddress", newAddressForm);
-            if (response.success) {
-                await fetchAddresses();
-                setShowAddNewAddressModal(false);
-                setNewAddressForm({ addressLabel: '', addressLine1: '', city: '', postalCode: '' });
-                setMessage("Address added successfully");
-                setTimeout(() => setMessage(""), 3000);
-            } else {
-                setAddressFormError(response.message || "Failed to add address");
-            }
+            // Returns { success: true, message: "..." }
+            await fetchAddresses();
+            setShowAddNewAddressModal(false);
+            setNewAddressForm({ addressLabel: '', addressLine1: '', city: '', postalCode: '' });
+            setMessage(response.message || "Address added successfully");
+            setTimeout(() => setMessage(""), 3000);
         } catch (error) {
             console.error("Error adding address:", error);
             setAddressFormError("Error adding address");
@@ -195,24 +189,21 @@ function ReviewOrderPage() {
             console.log("orderData",orderData);
             const response = await postData("CreateOrder", orderData);
             console.log(response);
-            if (response.success) {
-                updateCartCount();
-                console.log("Order created successfully");
-                setShowSuccessModal(true);
-                
-                // Start countdown timer
-                let timer = 5;
-                const interval = setInterval(() => {
-                    timer -= 1;
-                    setCountdown(timer);
-                    if (timer === 0) {
-                        clearInterval(interval);
-                        navigate("/product");
-                    }
-                }, 1000);
-            } else {
-                setMessage(response.message || "Order failed. Please try again.");
-            }
+            // Returns { success: true, message: "..." }
+            updateCartCount();
+            console.log("Order created successfully");
+            setShowSuccessModal(true);
+            
+            // Start countdown timer
+            let timer = 5;
+            const interval = setInterval(() => {
+                timer -= 1;
+                setCountdown(timer);
+                if (timer === 0) {
+                    clearInterval(interval);
+                    navigate("/product");
+                }
+            }, 1000);
         } catch (error) {
             console.error("Error creating order:", error);
             setMessage("Error processing order. Please try again.");

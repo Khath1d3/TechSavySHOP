@@ -24,7 +24,8 @@ function PersonalDetails() {
     const fetchUserDetails = async () => {
         try {
             const response = await getData("GetUserDetails");
-            const data = await response.data;
+            // API returns { success: true, data: {...} }
+            const data = response.data;
             setFormData({
                 firstName: data.firstName || "",
                 lastName: data.lastName || "",
@@ -94,12 +95,9 @@ function PersonalDetails() {
         setLoading(true);
         try {
             const response = await postData("UpdateUserDetails", formData);
-            if (response.success) {
-                showSuccessToast("Details updated successfully!");
-                setErrors({});
-            } else {
-                showErrorToast("Failed to update details. Please try again.");
-            }
+            // Returns { success: true, message: "..." }
+            showSuccessToast(response.message || "Details updated successfully!");
+            setErrors({});
         } catch (error) {
             console.error("Error updating details:", error);
             showErrorToast("An error occurred. Please try again.");

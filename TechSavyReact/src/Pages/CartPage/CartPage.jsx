@@ -48,13 +48,9 @@ function CartPage() {
         }
         showLoader();
         try {
+            // API returns { success: true, data: [...] }, empty array means no items
             const data = await getData(`CustomerCart`, {includeRelated: true});
-            if (data.success) {
-                setDevices(data.data || []);
-            } else {
-                setDevices([]);
-                setMessage(data.message || "No devices in the cart.");
-            }
+            setDevices(data.data || []);
             } catch (error) {
             console.error("Error fetching product:", error);
             setMessage("Error fetching product. Please try again later.");

@@ -114,29 +114,25 @@ function Signup({ onSwitchToLogin, onSuccess }) {
     setIsLoading(true);
     try {
       const response = await postData("register", requestData);
-      if (response.success) {
-        showSuccessToast("Registration successful! Welcome to Tech Savvy!");
-        // Reset form
-        setFormData({
-          userType: "",
-          firstName: "",
-          lastName: "",
-          email: "",
-          phoneNumber: "",
-          idNumber: "",
-          password: "",
-          confirmPassword: "",
-        });
-        setErrors({});
-        setMessage("");
-        
-        // Close modal on success
-        if (typeof onSuccess === "function") {
-          onSuccess();
-        }
-      } else {
-        showErrorToast(response.message || "Registration failed");
-        setMessage(`Error: ${response.message || "Registration failed"}`);
+      // Register returns { success: true, message: "..." }
+      showSuccessToast(response.message || "Registration successful! Welcome to Tech Savvy!");
+      // Reset form
+      setFormData({
+        userType: "",
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+        idNumber: "",
+        password: "",
+        confirmPassword: "",
+      });
+      setErrors({});
+      setMessage("");
+      
+      // Close modal on success
+      if (typeof onSuccess === "function") {
+        onSuccess();
       }
     } catch (error) {
       showErrorToast(error.message || "Registration failed");

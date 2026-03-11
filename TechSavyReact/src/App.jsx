@@ -14,6 +14,7 @@ import Loader from "./Components_test/loader.jsx";
 import Header from './Components_test/Header.jsx'
 import TokenWatcher from "./Components_test/TokenWatcher.jsx";
 import ProtectedRoute from "./assets/ProtectedRoute.jsx";
+import ErrorBoundary from "./Components_test/ErrorBoundary.jsx";
 
 
 function App() {
@@ -33,7 +34,8 @@ function App() {
       return () => window.removeEventListener("load", handleLoad);
     }
   }, []);
-  return(<>
+  return(
+    <ErrorBoundary>
       {loading && <Loader />}
       
        <Router>
@@ -50,7 +52,8 @@ function App() {
             <Route path='/customer-care' element={<CustomerCare/>} />
           </Routes>
        </Router>
-  </>)
+    </ErrorBoundary>
+  )
 }
 
 export default App

@@ -46,16 +46,11 @@ export const AuthProvider = ({ children }) => {
 const fetchUserData = async (token) => {
     try {
         const response = await getData("me");
-        if (response.success) {
-            // Backend returns firstName and lastName directly in response, not nested in data
-            setUserData({ 
-                firstName: response.firstName || response.data?.firstName, 
-                lastName: response.lastName || response.data?.lastName 
-            });
-        } else {
-            console.error("Failed to fetch user data:", response.message);
-            // Don't logout on failed user data fetch, user is still logged in
-        }
+        // API returns { success: true, firstName: "...", lastName: "..." }
+        setUserData({ 
+            firstName: response.firstName, 
+            lastName: response.lastName 
+        });
     } catch (error) {
         console.error("Error fetching user data:", error);
         // Don't logout on error, user is still logged in

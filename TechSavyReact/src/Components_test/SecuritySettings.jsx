@@ -37,27 +37,23 @@ function SecuritySettings() {
                 newPassword,
             });
             
-            setMessage(response.message || "Password change failed");
-            setMessageType(response.success ? "success" : "error");
-
-            if (response.success) {
-                showSuccessToast(response.message || "Password changed successfully!");
-                setTimeout(() => {
-                    setShowModal(false);
-                    setCurrentPassword("");
-                    setNewPassword("");
-                    setConfirmPassword("");
-                    setMessage("");
-                    setMessageType("");
-                }, 2000);
-            } else {
-                showErrorToast(response.message || "Password change failed");
-            }
+            // Returns { success: true, message: "..." }
+            setMessage(response.message || "Password changed successfully!");
+            setMessageType("success");
+            showSuccessToast(response.message || "Password changed successfully!");
+            setTimeout(() => {
+                setShowModal(false);
+                setCurrentPassword("");
+                setNewPassword("");
+                setConfirmPassword("");
+                setMessage("");
+                setMessageType("");
+            }, 2000);
         } catch (error) {
-            setMessage("An error occurred while changing the password.");
+            const errorMsg = error.message || "An error occurred while changing the password.";
+            setMessage(errorMsg);
             setMessageType("error");
-            showErrorToast("An error occurred while changing the password.");
-            setMessageType("error");
+            showErrorToast(errorMsg);
         }
     };
 

@@ -2,11 +2,28 @@
 const basePath = "https://techsavy-api-6c5y.onrender.com/api/TechSavy/";
 
 async function handleResponse(response) {
-    if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`HTTP error! Status: ${response.status}, Response: ${text}`);
+    // 1. If it's a 200 OK success, just return the data normally
+    if (response.ok) {
+        return response.json();
     }
-    return response.json();
+
+    // 2. If it's an error (400, 401, 500), extract the exact message
+    let extractedMessage = "An unexpected error occurred.";
+    
+    try {
+        const errorData = await response.json();
+        
+        // This looks for your standard backend response: { success: false, message: "..." }
+        // Or your Global Middleware response: { title: "..." }
+        extractedMessage = errorData.message || errorData.title || extractedMessage;
+        
+    } catch (e) {
+        // If the backend didn't send JSON (like a total server crash), fallback to text
+        extractedMessage = await response.text();
+    }
+
+    // 3. Throw a standard JS Error containing ONLY your clean text
+    throw new Error(extractedMessage);
 }
 export async function getData(path, queryObject = null) {
     let url = `${basePath}${path}`;

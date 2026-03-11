@@ -18,9 +18,9 @@ function OrderHistory() {
         try {
             showLoader();
             const response = await getData("GetOrderDetails");
-            if (response.success) {
-                // Data is already structured with OrderItems
-                const orders = (response.data || []).map(order => ({
+            // API returns { success: true, data: [...] }
+            // Data is already structured with OrderItems
+            const orders = (response.data || []).map(order => ({
                     orderID: order.orderID,
                     orderDate: order.orderDate,
                     totalAmount: order.totalAmount,
@@ -37,9 +37,6 @@ function OrderHistory() {
                 orders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
                 
                 setOrders(orders);
-            } else {
-                setMessage("Failed to fetch orders");
-            }
         } catch (error) {
             console.error("Error fetching orders:", error);
             setMessage("Error loading orders");

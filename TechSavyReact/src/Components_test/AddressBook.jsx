@@ -13,10 +13,9 @@ function AddressBook() {
     const UserAddress = async () => {
         try {
             const response = await getData("GetUserAddress");
-            if (response.success) {
-                setAddresses(response.data); 
-                console.log("Fetched addresses:", response.data);
-            }
+            // API returns { success: true, data: [...] }
+            setAddresses(response.data || []); 
+            console.log("Fetched addresses:", response.data);
         } catch (error) {
             console.error("Error fetching addresses:", error);
         }
@@ -90,15 +89,12 @@ function AddressBook() {
         if (modalMode === 'add') {
               try {
                     const response = await postData("AddAddress", formData);
-                    if (response.success) {
-                        console.log("Address saved successfully");
-                        showSuccessToast("Address added successfully!");
-                        UserAddress();
-                        setShowModal(false);
-                        setErrors({});
-                    } else {
-                        showErrorToast("Failed to add address");
-                    }
+                    // Returns { success: true, message: "..." }
+                    console.log("Address saved successfully");
+                    showSuccessToast(response.message || "Address added successfully!");
+                    UserAddress();
+                    setShowModal(false);
+                    setErrors({});
                 } catch (error) {
                     console.error("Error saving address:", error);
                     showErrorToast("An error occurred while saving address");
@@ -106,15 +102,12 @@ function AddressBook() {
         } else if (modalMode === 'edit') {
                 try {
                     const response = await postData("UpdateAddress", formData);
-                    if (response.success) {
-                        console.log("Address updated successfully");
-                        showSuccessToast("Address updated successfully!");
-                        UserAddress();
-                        setShowModal(false);
-                        setErrors({});
-                    } else {
-                        showErrorToast("Failed to update address");
-                    }
+                    // Returns { success: true, message: "..." }
+                    console.log("Address updated successfully");
+                    showSuccessToast(response.message || "Address updated successfully!");
+                    UserAddress();
+                    setShowModal(false);
+                    setErrors({});
                 } catch (error) {
                     console.error("Error updating address:", error);
                     showErrorToast("An error occurred while updating address");
@@ -126,13 +119,10 @@ function AddressBook() {
           try {
                     const intergerclass={addressid:formData.id}
                     const response = await postData("DeleteAddress", intergerclass);
-                    if (response.success) {
-                        console.log("Address Deleted successfully");
-                        showSuccessToast("Address deleted successfully!");
-                        UserAddress();
-                    } else {
-                        showErrorToast("Failed to delete address");
-                    }
+                    // Returns { success: true, message: "..." }
+                    console.log("Address Deleted successfully");
+                    showSuccessToast(response.message || "Address deleted successfully!");
+                    UserAddress();
                 } catch (error) {
                     console.error("Error deleting address:", error);
                     showErrorToast("An error occurred while deleting address");
@@ -144,10 +134,9 @@ function AddressBook() {
             const intergerclass={addressid:addressid}
             console.log("Selected Address ID:", addressid);
             const response = await postData("ChangeisSelectedAddress", intergerclass);
-            if (response.success) {
-                console.log("Address selected successfully");
-                UserAddress();
-            }
+            // Returns { success: true, message: "..." }
+            console.log("Address selected successfully");
+            UserAddress();
         } catch (error) {
             console.error("Error selecting address:", error);
         }
