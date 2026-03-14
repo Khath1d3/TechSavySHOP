@@ -12,14 +12,19 @@ function CartItem({ productid, name, quantity, price, imageURL, Reload, isGuestI
     const { isLoggedIn } = useContext(AuthContext);
     const navigate = useNavigate();
     const [message, setMessage] = useState("");
+    const [actionLoading, setActionLoading] = useState("");
     console.log("productid",productid);
     
     const Remove = async () => {
+        if (actionLoading) return;
+        setActionLoading("remove");
+
         if (!isLoggedIn || isGuestItem) {
             // Handle guest cart removal
             removeFromGuestCart(productid);
             updateCartCount();
             Reload();
+            setActionLoading("");
             return;
         }
         
@@ -33,10 +38,14 @@ function CartItem({ productid, name, quantity, price, imageURL, Reload, isGuestI
         } finally {
             hideLoader();
             Reload();
+            setActionLoading("");
         }
     };
     
     const Add = async () => {
+        if (actionLoading) return;
+        setActionLoading("add");
+
         if (!isLoggedIn || isGuestItem) {
             // Handle guest cart increase
             const guestCart = getGuestCart();
@@ -47,6 +56,7 @@ function CartItem({ productid, name, quantity, price, imageURL, Reload, isGuestI
                 updateCartCount();
                 Reload();
             }
+            setActionLoading("");
             return;
         }
         
@@ -60,6 +70,7 @@ function CartItem({ productid, name, quantity, price, imageURL, Reload, isGuestI
         } finally {
             hideLoader();
             Reload();
+            setActionLoading("");
         }
     };
     return(
@@ -77,8 +88,20 @@ function CartItem({ productid, name, quantity, price, imageURL, Reload, isGuestI
                         Qty:
                         <label htmlFor="quantity">{quantity}</label>
                     </div>
-                    <button className="cart-remove-btn" onClick={(e) => { e.stopPropagation(); Remove(); }}>-</button>
-                    <button className="move-to-list-btn" onClick={(e) => { e.stopPropagation(); Add(); }}>+</button>
+                    <button
+                        className="cart-remove-btn"
+                        onClick={(e) => { e.stopPropagation(); Remove(); }}
+                        disabled={Boolean(actionLoading)}
+                    >
+                        {actionLoading === "remove" ? "Removing..." : "-"}
+                    </button>
+                    <button
+                        className="move-to-list-btn"
+                        onClick={(e) => { e.stopPropagation(); Add(); }}
+                        disabled={Boolean(actionLoading)}
+                    >
+                        {actionLoading === "add" ? "Adding..." : "+"}
+                    </button>
                 </div>
             </div>
         </div>

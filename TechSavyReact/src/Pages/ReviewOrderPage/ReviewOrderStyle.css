@@ -328,13 +328,26 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
 }
 
-.pay-btn:hover {
+.pay-btn:hover:not(:disabled) {
     background-color: #005700;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 87, 0, 0.3);
+    box-shadow: 0 4px 12px #0057004d;
 }
+
+.pay-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    opacity: 0.7;
+}
+
 
 /* Security Badges */
 .security-badges {
@@ -345,7 +358,6 @@
     flex-direction: column;
     gap: 8px;
 }
-
 .security-badges p {
     font-size: 0.9rem;
     color: #666;
@@ -388,6 +400,17 @@
     background-color: #f0f8f0;
 }
 
+.address-option.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.review-address-updating {
+    margin-left: auto;
+    font-size: 0.85rem;
+    color: #666;
+}
+
 .review-address-radio input[type="radio"] {
     width: 18px;
     height: 18px;
@@ -414,8 +437,7 @@
 .no-addresses {
     text-align: center;
     color: #999;
-    padding: 20px;
-    font-style: italic;
+    opacity: 0.7;
 }
 
 /* Add New Address Button */
@@ -437,7 +459,23 @@
     background-color: #005700;
 }
 
-/* Add New Address Modal */
+/* Security Badges */
+.security-badges {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.security-badges p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}
+
+/* Address Modal */
 .review-add-address-modal {
     padding: 20px;
     max-width: 500px;
@@ -498,10 +536,43 @@
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
-.review-save-address-btn:hover {
+.review-save-address-btn:hover:not(:disabled) {
     background-color: #005700;
+}
+
+.review-save-address-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Button spinner */
+.button-spinner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.pay-btn .spinner,
+.review-save-address-btn .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: reviewSpin 0.8s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes reviewSpin {
+    to { transform: rotate(360deg); }
 }
 
 .review-cancel-btn {

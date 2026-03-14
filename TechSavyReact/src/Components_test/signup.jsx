@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useLoader } from "../assets/LoaderContext";
 import { postData } from "./ApiService";
 import { 
   validateTextOnly, 
@@ -24,6 +25,8 @@ function Signup({ onSwitchToLogin, onSuccess }) {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   
+  const { showLoader, hideLoader } = useLoader();
+
   const handleSwitchToLogin = () => {
     if (typeof onSwitchToLogin === "function") {
       onSwitchToLogin();
@@ -112,6 +115,7 @@ function Signup({ onSwitchToLogin, onSuccess }) {
     delete requestData.confirmPassword;
 
     setIsLoading(true);
+    showLoader();
     try {
       const response = await postData("register", requestData);
       // Register returns { success: true, message: "..." }
@@ -139,6 +143,7 @@ function Signup({ onSwitchToLogin, onSuccess }) {
       setMessage(`Error: ${error.message || "Registration failed"}`);
     } finally {
       setIsLoading(false);
+      hideLoader();
     }
   };
   
@@ -159,6 +164,7 @@ function Signup({ onSwitchToLogin, onSuccess }) {
               placeholder="Enter first name"
               value={formData.firstName}
               onChange={handleChange}
+              maxLength={50}
               required
               disabled={isLoading}
             />
@@ -176,6 +182,7 @@ function Signup({ onSwitchToLogin, onSuccess }) {
               placeholder="Enter last name"
               value={formData.lastName}
               onChange={handleChange}
+              maxLength={50}
               required
               disabled={isLoading}
             />
@@ -193,6 +200,7 @@ function Signup({ onSwitchToLogin, onSuccess }) {
               placeholder="Enter email"
               value={formData.email}
               onChange={handleChange}
+              maxLength={100}
               required
               disabled={isLoading}
             />
@@ -210,6 +218,7 @@ function Signup({ onSwitchToLogin, onSuccess }) {
               placeholder="Enter phone number (+27 or 0)"
               value={formData.phoneNumber}
               onChange={handleChange}
+              maxLength={12}
               required
               disabled={isLoading}
             />
@@ -227,6 +236,7 @@ function Signup({ onSwitchToLogin, onSuccess }) {
               placeholder="Enter 13-digit ID number"
               value={formData.idNumber}
               onChange={handleChange}
+              maxLength={13}
               required
               disabled={isLoading}
             />
@@ -244,6 +254,7 @@ function Signup({ onSwitchToLogin, onSuccess }) {
               placeholder="Enter password"
               value={formData.password}
               onChange={handleChange}
+              maxLength={64}
               required
               disabled={isLoading}
             />
@@ -270,6 +281,7 @@ function Signup({ onSwitchToLogin, onSuccess }) {
               placeholder="Confirm password"
               value={formData.confirmPassword}
               onChange={handleChange}
+              maxLength={64}
               required
               disabled={isLoading}
             />

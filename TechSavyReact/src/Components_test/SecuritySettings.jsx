@@ -3,6 +3,7 @@ import { postData } from "./ApiService";
 import Modal from "./modal";
 import { validatePassword, validateRequired } from "../utils/validation";
 import { showSuccessToast, showErrorToast } from "../utils/toast";
+import { useLoader } from "../assets/LoaderContext";
 import "../componentStyle/SecuritySettingsStyle.css";
 
 function SecuritySettings() {
@@ -15,8 +16,12 @@ function SecuritySettings() {
     const [showCurrentPassword, setShowCurrentPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [isChangingPassword, setIsChangingPassword] = useState(false);
+    const { showLoader, hideLoader } = useLoader();
 
     const handleChangePassword = async () => {
+        if (isChangingPassword) return;
+
         if (newPassword !== confirmPassword) {
             setMessage("New passwords do not match!");
             setMessageType("error");
@@ -32,6 +37,8 @@ function SecuritySettings() {
         }
 
         try {
+            setIsChangingPassword(true);
+            showLoader();
             const response = await postData("ChangePassword", {
                 currentPassword,
                 newPassword,
@@ -54,6 +61,9 @@ function SecuritySettings() {
             setMessage(errorMsg);
             setMessageType("error");
             showErrorToast(errorMsg);
+        } finally {
+            setIsChangingPassword(false);
+            hideLoader();
         }
     };
 
@@ -99,12 +109,15 @@ function SecuritySettings() {
                                     placeholder="Enter current password"
                                     value={currentPassword}
                                     onChange={(e) => setCurrentPassword(e.target.value)}
+                                    maxLength={64}
+                                    disabled={isChangingPassword}
                                 />
                                 <button
                                     type="button"
                                     className="password-toggle-btn"
                                     onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                                     aria-label={showCurrentPassword ? "Hide password" : "Show password"}
+                                    disabled={isChangingPassword}
                                 >
                                     {showCurrentPassword ? "👁️" : "👁️‍🗨️"}
                                 </button>
@@ -120,12 +133,15 @@ function SecuritySettings() {
                                     placeholder="Enter new password"
                                     value={newPassword}
                                     onChange={(e) => setNewPassword(e.target.value)}
+                                    maxLength={64}
+                                    disabled={isChangingPassword}
                                 />
                                 <button
                                     type="button"
                                     className="password-toggle-btn"
                                     onClick={() => setShowNewPassword(!showNewPassword)}
                                     aria-label={showNewPassword ? "Hide password" : "Show password"}
+                                    disabled={isChangingPassword}
                                 >
                                     {showNewPassword ? "👁️" : "👁️‍🗨️"}
                                 </button>
@@ -141,12 +157,15 @@ function SecuritySettings() {
                                     placeholder="Confirm new password"
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
+                                    maxLength={64}
+                                    disabled={isChangingPassword}
                                 />
                                 <button
                                     type="button"
                                     className="password-toggle-btn"
                                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                     aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                                    disabled={isChangingPassword}
                                 >
                                     {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
                                 </button>
@@ -158,10 +177,10 @@ function SecuritySettings() {
                         )}
                         
                         <div className="modal-actions">
-                            <button className="btn btn-primary" onClick={handleChangePassword}>
-                                Change Password
+                            <button className="btn btn-primary" onClick={handleChangePassword} disabled={isChangingPassword}>
+                                {isChangingPassword ? "Changing..." : "Change Password"}
                             </button>
-                            <button className="btn btn-secondary" onClick={handleCloseModal}>
+                            <button className="btn btn-secondary" onClick={handleCloseModal} disabled={isChangingPassword}>
                                 Cancel
                             </button>
                         </div>

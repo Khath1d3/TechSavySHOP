@@ -5,10 +5,12 @@ import Modal from "./modal";
 import { getData, postData } from "./ApiService";
 import { validateTextOnly, validatePostalCode, validateAddress } from "../utils/validation";
 import { showSuccessToast, showErrorToast } from "../utils/toast";
+import { useLoader } from "../assets/LoaderContext";
 
 function AddressBook() {
     // Initialize addresses as an empty array
     const [addresses, setAddresses] = useState([]); // Change here
+    const { showLoader, hideLoader } = useLoader();
 
     const UserAddress = async () => {
         try {
@@ -30,6 +32,9 @@ function AddressBook() {
     const [modalMode, setModalMode] = useState(null); // 'add', 'edit', or 'delete'
     const [formData, setFormData] = useState({ addressLabel: '', addressLine1: '', city: '', postalCode: '' });
     const [errors, setErrors] = useState({});
+    const [isSaving, setIsSaving] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [selectingAddressId, setSelectingAddressId] = useState(null);
 
     const openAddModal = () => {
         setModalMode('add');
@@ -88,6 +93,8 @@ function AddressBook() {
         
         if (modalMode === 'add') {
               try {
+                    setIsSaving(true);
+                    showLoader();
                     const response = await postData("AddAddress", formData);
                     // Returns { success: true, message: "..." }
                     console.log("Address saved successfully");
@@ -98,9 +105,14 @@ function AddressBook() {
                 } catch (error) {
                     console.error("Error saving address:", error);
                     showErrorToast("An error occurred while saving address");
+                } finally {
+                    setIsSaving(false);
+                    hideLoader();
                 }
         } else if (modalMode === 'edit') {
                 try {
+                    setIsSaving(true);
+                    showLoader();
                     const response = await postData("UpdateAddress", formData);
                     // Returns { success: true, message: "..." }
                     console.log("Address updated successfully");
@@ -111,12 +123,17 @@ function AddressBook() {
                 } catch (error) {
                     console.error("Error updating address:", error);
                     showErrorToast("An error occurred while updating address");
+                } finally {
+                    setIsSaving(false);
+                    hideLoader();
                 }
         }
     };
 
     const handleDelete = async (addressid) => {
           try {
+                    setIsDeleting(true);
+                    showLoader();
                     const intergerclass={addressid:formData.id}
                     const response = await postData("DeleteAddress", intergerclass);
                     // Returns { success: true, message: "..." }
@@ -126,19 +143,30 @@ function AddressBook() {
                 } catch (error) {
                     console.error("Error deleting address:", error);
                     showErrorToast("An error occurred while deleting address");
+                } finally {
+                    setIsDeleting(false);
+                    hideLoader();
                 }
         setShowModal(false);
     };
     const ChangeSelectedAddress = async (addressid) => {
+    if (selectingAddressId) return;
     try {
+            setSelectingAddressId(addressid);
+            showLoader();
             const intergerclass={addressid:addressid}
             console.log("Selected Address ID:", addressid);
             const response = await postData("ChangeisSelectedAddress", intergerclass);
             // Returns { success: true, message: "..." }
             console.log("Address selected successfully");
+            showSuccessToast(response.message || "Address selected successfully");
             UserAddress();
         } catch (error) {
             console.error("Error selecting address:", error);
+            showErrorToast("Error selecting address");
+        } finally {
+            setSelectingAddressId(null);
+            hideLoader();
         }
     }
     
@@ -168,6 +196,8 @@ function AddressBook() {
                             onSelect={ChangeSelectedAddress}
                             onEdit={() => openEditModal(addr.addressID)}
                             onDelete={() => openDeleteModal(addr.addressID)}
+                            isSelecting={selectingAddressId === addr.addressID}
+                            disabled={Boolean(selectingAddressId)}
                         />
                     ))
                 )}
@@ -179,8 +209,10 @@ function AddressBook() {
                         <h3>Delete Address?</h3>
                         <p>Are you sure you want to delete this address?</p>
                         <div className="modal-buttons">
-                            <button onClick={handleDelete} className="btn-confirm">Delete</button>
-                            <button onClick={() => setShowModal(false)} className="btn-cancel">Cancel</button>
+                            <button onClick={handleDelete} className="btn-confirm" disabled={isDeleting}>
+                                {isDeleting ? "Deleting..." : "Delete"}
+                            </button>
+                            <button onClick={() => setShowModal(false)} className="btn-cancel" disabled={isDeleting}>Cancel</button>
                         </div>
                     </>
                 ) : (
@@ -195,6 +227,7 @@ function AddressBook() {
                                 placeholder="Enter address name (e.g., Home, Office)"
                                 value={formData.addressLabel}
                                 onChange={(e) => handleInputChange('addressLabel', e.target.value)}
+                                maxLength={50}
                                 required
                             />
                             {errors.addressLabel && <span className="error-message">{errors.addressLabel}</span>}
@@ -208,6 +241,7 @@ function AddressBook() {
                                 placeholder="Enter street address"
                                 value={formData.addressLine1}
                                 onChange={(e) => handleInputChange('addressLine1', e.target.value)}
+                                maxLength={120}
                                 required
                             />
                             {errors.addressLine1 && <span className="error-message">{errors.addressLine1}</span>}
@@ -221,6 +255,7 @@ function AddressBook() {
                                 placeholder="Enter city"
                                 value={formData.city}
                                 onChange={(e) => handleInputChange('city', e.target.value)}
+                                maxLength={50}
                                 required
                             />
                             {errors.city && <span className="error-message">{errors.city}</span>}
@@ -241,8 +276,10 @@ function AddressBook() {
                         </div>
 
                         <div className="modal-buttons">
-                            <button onClick={handleSave} className="btn-confirm">Save</button>
-                            <button onClick={() => setShowModal(false)} className="btn-cancel">Cancel</button>
+                            <button onClick={handleSave} className="btn-confirm" disabled={isSaving}>
+                                {isSaving ? "Saving..." : "Save"}
+                            </button>
+                            <button onClick={() => setShowModal(false)} className="btn-cancel" disabled={isSaving}>Cancel</button>
                         </div>
                     </>
                 )}

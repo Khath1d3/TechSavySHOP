@@ -83,6 +83,13 @@
     color: #0056b3;
 }
 
+.cart-remove-btn:disabled,
+.move-to-list-btn:disabled {
+    color: #8aa8c9;
+    cursor: not-allowed;
+    text-decoration: none;
+}
+
 /* Right side - Cart Summary */
 .cart-cart-summary {
     flex: 1;

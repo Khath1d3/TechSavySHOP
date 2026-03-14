@@ -123,6 +123,7 @@ function PersonalDetails() {
                         name="firstName"
                         value={formData.firstName}
                         onChange={handleChange}
+                        maxLength={50}
                         required
                     />
                     {errors.firstName && <span className="error-message">{errors.firstName}</span>}
@@ -138,6 +139,7 @@ function PersonalDetails() {
                         name="lastName"
                         value={formData.lastName}
                         onChange={handleChange}
+                        maxLength={50}
                         required
                     />
                     {errors.lastName && <span className="error-message">{errors.lastName}</span>}
@@ -153,6 +155,7 @@ function PersonalDetails() {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
+                        maxLength={100}
                         required
                     />
                     {errors.email && <span className="error-message">{errors.email}</span>}
@@ -168,6 +171,7 @@ function PersonalDetails() {
                         name="phoneNumber"
                         value={formData.phoneNumber}
                         onChange={handleChange}
+                        maxLength={12}
                         required
                     />
                     {errors.phoneNumber && <span className="error-message">{errors.phoneNumber}</span>}

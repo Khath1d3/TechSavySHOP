@@ -372,6 +372,7 @@ console.log(currentDevices,"currentDevices");
                         id="search-input"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
+                      maxLength={80}
                     />
                 </div>
                 <div className="product-filter-category">

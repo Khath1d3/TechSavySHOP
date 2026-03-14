@@ -113,6 +113,7 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
             name="email"
             value={formData.email}
             onChange={handleChange}
+            maxLength={100}
             required
             disabled={isLoading}
           />
@@ -128,6 +129,7 @@ function Login({ onSuccess, onSwitchToSignup, onForgotPassword }) {
               name="password"
               value={formData.password}
               onChange={handleChange}
+              maxLength={64}
               required
               disabled={isLoading}
             />

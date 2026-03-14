@@ -18,6 +18,9 @@ const ProductReviews = () => {
   const [selectedReview, setSelectedReview] = useState(null);
   const [reviewStars, setReviewStars] = useState(0);
   const [reviewDescription, setReviewDescription] = useState("");
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+  const [isUpdatingReview, setIsUpdatingReview] = useState(false);
+  const [isDeletingReview, setIsDeletingReview] = useState(false);
   const { showLoader, hideLoader } = useLoader();
   const { isLoggedIn } = useContext(AuthContext);
 
@@ -79,6 +82,8 @@ const ProductReviews = () => {
   };
 
   const handleSubmitReview = async () => {
+    if (isSubmittingReview) return;
+
     if (reviewStars === 0) {
       showWarningToast("Please select a star rating");
       return;
@@ -89,6 +94,7 @@ const ProductReviews = () => {
     }
 
     try {
+      setIsSubmittingReview(true);
       showLoader();
       const review = {
         reviewID: selectedProduct.cartItemID,
@@ -105,6 +111,7 @@ const ProductReviews = () => {
       console.error("Error submitting review:", error);
       showErrorToast("Failed to submit review. Please try again.");
     } finally {
+      setIsSubmittingReview(false);
       hideLoader();
     }
   };
@@ -117,6 +124,8 @@ const ProductReviews = () => {
   };
 
   const handleSubmitUpdate = async () => {
+    if (isUpdatingReview) return;
+
     if (reviewStars === 0) {
       showWarningToast("Please select a star rating");
       return;
@@ -127,6 +136,7 @@ const ProductReviews = () => {
     }
 
     try {
+      setIsUpdatingReview(true);
       showLoader();
       const updatedReview = {
         reviewID: selectedReview.reviewID,
@@ -142,6 +152,7 @@ const ProductReviews = () => {
       console.error("Error updating review:", error);
       showErrorToast("Failed to update review. Please try again.");
     } finally {
+      setIsUpdatingReview(false);
       hideLoader();
     }
   };
@@ -152,7 +163,10 @@ const ProductReviews = () => {
   };
 
   const confirmDeleteReview = async () => {
+    if (isDeletingReview) return;
+
     try {
+      setIsDeletingReview(true);
       showLoader();
       await postData(`RemoveReview/${selectedReview.reviewID}`);
       showSuccessToast("Review deleted successfully!");
@@ -162,6 +176,7 @@ const ProductReviews = () => {
       console.error("Error deleting review:", error);
       showErrorToast("Failed to delete review. Please try again.");
     } finally {
+      setIsDeletingReview(false);
       hideLoader();
     }
   };
@@ -278,14 +293,16 @@ const ProductReviews = () => {
               onChange={(e) => setReviewDescription(e.target.value)}
               placeholder="Share your experience with this product..."
               rows="5"
+              maxLength={500}
+              disabled={isSubmittingReview}
             />
           </div>
           <div className="modal-actions">
-            <button className="cancel-btn" onClick={() => setIsReviewModalOpen(false)}>
+            <button className="cancel-btn" onClick={() => setIsReviewModalOpen(false)} disabled={isSubmittingReview}>
               Cancel
             </button>
-            <button className="submit-btn" onClick={handleSubmitReview}>
-              Submit Review
+            <button className="submit-btn" onClick={handleSubmitReview} disabled={isSubmittingReview}>
+              {isSubmittingReview ? "Submitting..." : "Submit Review"}
             </button>
           </div>
         </div>
@@ -312,14 +329,16 @@ const ProductReviews = () => {
               onChange={(e) => setReviewDescription(e.target.value)}
               placeholder="Share your experience with this product..."
               rows="5"
+              maxLength={500}
+              disabled={isUpdatingReview}
             />
           </div>
           <div className="modal-actions">
-            <button className="cancel-btn" onClick={() => setIsUpdateModalOpen(false)}>
+            <button className="cancel-btn" onClick={() => setIsUpdateModalOpen(false)} disabled={isUpdatingReview}>
               Cancel
             </button>
-            <button className="submit-btn" onClick={handleSubmitUpdate}>
-              Update Review
+            <button className="submit-btn" onClick={handleSubmitUpdate} disabled={isUpdatingReview}>
+              {isUpdatingReview ? "Updating..." : "Update Review"}
             </button>
           </div>
         </div>
@@ -337,11 +356,11 @@ const ProductReviews = () => {
             </div>
           )}
           <div className="modal-actions">
-            <button className="cancel-btn" onClick={() => setIsDeleteModalOpen(false)}>
+            <button className="cancel-btn" onClick={() => setIsDeleteModalOpen(false)} disabled={isDeletingReview}>
               Cancel
             </button>
-            <button className="delete-confirm-btn" onClick={confirmDeleteReview}>
-              Delete Review
+            <button className="delete-confirm-btn" onClick={confirmDeleteReview} disabled={isDeletingReview}>
+              {isDeletingReview ? "Deleting..." : "Delete Review"}
             </button>
           </div>
         </div>

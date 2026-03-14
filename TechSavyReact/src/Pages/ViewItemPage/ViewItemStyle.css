@@ -30,6 +30,12 @@
 .viewitem-add-to-cart-btn:hover{
   background-color: #4b6b4b;
 }
+
+.viewitem-add-to-cart-btn:disabled {
+  background-color: #95a595;
+  cursor: not-allowed;
+}
+
 .viewitem-remove-from-cart-btn{
   background-color: #dc3545;
   color: white;
@@ -41,6 +47,11 @@
 }
 .viewitem-remove-from-cart-btn:hover{
   background-color: #c82333;
+}
+
+.viewitem-remove-from-cart-btn:disabled {
+  background-color: #d3a6ab;
+  cursor: not-allowed;
 }
 
 .add-to-cart-success {

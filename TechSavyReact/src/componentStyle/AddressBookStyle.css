@@ -16,6 +16,21 @@
     background-color: #f0f8ff;
 }
 
+.address-option.loading,
+.address-option.disabled {
+    opacity: 0.7;
+}
+
+.address-option.disabled {
+    pointer-events: none;
+}
+
+.address-updating {
+    margin-top: 6px;
+    color: #666;
+    font-size: 12px;
+}
+
 .address-option input[type="radio"] {
     margin-right: 12px;
     margin-top: 4px;
@@ -48,6 +63,11 @@
 
 .actions button:hover {
     text-decoration: underline;
+}
+
+.actions button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* ===== Address Book Container ===== */
@@ -247,6 +267,13 @@
     transform: translateY(0);
 }
 
+.btn-confirm:disabled {
+    background-color: #9fb8a8;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
 .btn-cancel {
     padding: 10px 20px;
     background-color: #6c757d;
@@ -267,6 +294,13 @@
 
 .btn-cancel:active {
     transform: translateY(0);
+}
+
+.btn-cancel:disabled {
+    background-color: #adb5bd;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 .form-group .error-message {
     padding: 0!important;

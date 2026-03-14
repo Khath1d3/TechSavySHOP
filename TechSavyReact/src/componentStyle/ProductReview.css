@@ -335,6 +335,15 @@
     background-color: darkgreen;
   }
 
+  .cancel-btn:disabled,
+  .submit-btn:disabled,
+  .delete-confirm-btn:disabled,
+  .update-review-btn:disabled,
+  .delete-review-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+
   /* Responsive Design */
   @media screen and (max-width: 968px) {
     .review-container {

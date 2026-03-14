@@ -58,6 +58,7 @@ function ForgotPassword({ onBack }) {
                             placeholder="Enter your email"
                             value={email}
                             onChange={handleEmailChange}
+                            maxLength={100}
                             required
                             disabled={isLoading}
                         />

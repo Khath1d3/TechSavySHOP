@@ -26,6 +26,7 @@ function ViewItemPage() {
       const [selectedStarFilter, setSelectedStarFilter] = useState(0);
       const [isInCart, setIsInCart] = useState(false);
       const [addedToCart, setAddedToCart] = useState(false);
+      const [isCartActionLoading, setIsCartActionLoading] = useState(false);
 
       const filteredReviews = selectedStarFilter === 0 
           ? productReviews 
@@ -36,11 +37,10 @@ useEffect(() => {
     showLoader();
     try {
       const response = await getData(`GetProductsById/${id}?includeRelated=true`);
-      console.log("response",response);
       // API returns { success: true, data: { Product: {...}, RelatedProducts: [...] } }
       const data = response.data;
-      setProduct(data.Product);
-      setRelated(data.RelatedProducts || []);
+      setProduct(data.product);
+      setRelated(data.relatedProducts || []);
         
         // Save to recently viewed in localStorage
         try {
@@ -112,6 +112,9 @@ useEffect(() => {
 }, [id, isLoggedIn]);
 
 const handleAddToCart = async () => {
+  if (isCartActionLoading) return;
+
+  setIsCartActionLoading(true);
   if (!isLoggedIn) {
     // Add to localStorage for guest users with full product details
     addToGuestCart(parseInt(id), 1, {
@@ -123,6 +126,7 @@ const handleAddToCart = async () => {
     updateCartCount();
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2000);
+    setIsCartActionLoading(false);
     return;
   }
   
@@ -138,15 +142,20 @@ const handleAddToCart = async () => {
     setMessage("Error adding to cart. Please try again later.");
   } finally {
     hideLoader();
+    setIsCartActionLoading(false);
   }
 };
 
 const handleRemoveFromCart = async () => {
+  if (isCartActionLoading) return;
+
+  setIsCartActionLoading(true);
   if (!isLoggedIn) {
     // Remove from localStorage for guest users
     removeFromGuestCart(parseInt(id));
     setIsInCart(false);
     updateCartCount();
+    setIsCartActionLoading(false);
     return;
   }
   
@@ -160,6 +169,7 @@ const handleRemoveFromCart = async () => {
     setMessage("Error removing from cart. Please try again later.");
   } finally {
     hideLoader();
+    setIsCartActionLoading(false);
   }
 };
 
@@ -190,12 +200,12 @@ const handleRemoveFromCart = async () => {
                             <p className="shipping-time">Delivery: 5 - 7 work days</p>
                             <p className="price">{product.price}</p>
                             {isInCart ? (
-                                <button className="viewitem-remove-from-cart-btn" onClick={handleRemoveFromCart}>
-                                    Remove from Cart
+                              <button className="viewitem-remove-from-cart-btn" onClick={handleRemoveFromCart} disabled={isCartActionLoading}>
+                                {isCartActionLoading ? "Removing..." : "Remove from Cart"}
                                 </button>
                             ) : (
-                                <button className="viewitem-add-to-cart-btn" onClick={handleAddToCart}>
-                                    Add to Cart
+                              <button className="viewitem-add-to-cart-btn" onClick={handleAddToCart} disabled={isCartActionLoading}>
+                                {isCartActionLoading ? "Adding..." : "Add to Cart"}
                                 </button>
                             )}
                             {addedToCart && (

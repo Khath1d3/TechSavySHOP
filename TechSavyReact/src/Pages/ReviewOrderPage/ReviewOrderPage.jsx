@@ -7,6 +7,7 @@ import { getData, postData } from "../../Components_test/ApiService";
 import { useLoader } from "../../assets/LoaderContext";
 import { useCart } from "../../assets/CartContext";
 import { AuthContext } from "../../assets/AuthContext";
+import { showErrorToast, showSuccessToast } from "../../utils/toast";
 import "./ReviewOrderStyle.css";
 
 function ReviewOrderPage() {
@@ -32,12 +33,25 @@ function ReviewOrderPage() {
     const [message, setMessage] = useState("");
     const [addressFormError, setAddressFormError] = useState("");
     const [countdown, setCountdown] = useState(5);
+    const [isPayLoading, setIsPayLoading] = useState(false);
+    const [isAddressLoading, setIsAddressLoading] = useState(false);
+    const [isChangingAddress, setIsChangingAddress] = useState(false);
     const [newAddressForm, setNewAddressForm] = useState({
         addressLabel: '',
         addressLine1: '',
         city: '',
         postalCode: ''
     });
+
+    const showPageMessage = (text, isError = true) => {
+        setMessage(text);
+        if (isError) {
+            showErrorToast(text);
+        } else {
+            showSuccessToast(text);
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
 
     // Fetch cart items
     const fetchCartItems = async () => {
@@ -56,7 +70,7 @@ function ReviewOrderPage() {
             }
         } catch (error) {
             console.error("Error fetching cart:", error);
-            setMessage("Error loading cart items.");
+            showPageMessage("Error loading cart items.");
         } finally {
             hideLoader();
         }
@@ -119,13 +133,21 @@ function ReviewOrderPage() {
 
     // Handle address change
     const handleChangeAddress = async (addressId) => {
+        if (isChangingAddress) return;
         try {
+            setIsChangingAddress(true);
+            showLoader();
             const response = await postData("ChangeisSelectedAddress", { addressid: addressId });
             // Returns { success: true, message: "..." }
             await fetchAddresses();
             setShowAddressModal(false);
+            showSuccessToast(response.message || "Delivery address updated");
         } catch (error) {
             console.error("Error changing address:", error);
+            showErrorToast("Error changing address");
+        } finally {
+            setIsChangingAddress(false);
+            hideLoader();
         }
     };
 
@@ -137,6 +159,7 @@ function ReviewOrderPage() {
         }
 
         try {
+            setIsAddressLoading(true);
             showLoader();
             setAddressFormError("");
             const response = await postData("AddAddress", newAddressForm);
@@ -144,12 +167,14 @@ function ReviewOrderPage() {
             await fetchAddresses();
             setShowAddNewAddressModal(false);
             setNewAddressForm({ addressLabel: '', addressLine1: '', city: '', postalCode: '' });
-            setMessage(response.message || "Address added successfully");
+            showPageMessage(response.message || "Address added successfully", false);
             setTimeout(() => setMessage(""), 3000);
         } catch (error) {
             console.error("Error adding address:", error);
             setAddressFormError("Error adding address");
+            showErrorToast("Error adding address");
         } finally {
+            setIsAddressLoading(false);
             hideLoader();
         }
     };
@@ -160,26 +185,27 @@ function ReviewOrderPage() {
         console.log("selectedPaymentId",selectedPaymentId);
         console.log("cartId",cartId);
         if (!selectedAddress) {
-            setMessage("Please select a delivery address");
+            showPageMessage("Please select a delivery address");
             return;
         }
 
         if (!selectedPaymentId) {
-            setMessage("Please select a payment method");
+            showPageMessage("Please select a payment method");
             return;
         }
 
         if (!cartId) {
-            setMessage("Cart information not available");
+            showPageMessage("Cart information not available");
             return;
         }
 
         if (cartItems.length === 0) {
-            setMessage("Your cart is empty");
+            showPageMessage("Your cart is empty");
             return;
         }
 
         try {
+            setIsPayLoading(true);
             showLoader();
             const orderData = {
                 cartId: cartId,
@@ -206,8 +232,9 @@ function ReviewOrderPage() {
             }, 1000);
         } catch (error) {
             console.error("Error creating order:", error);
-            setMessage("Error processing order. Please try again.");
+            showPageMessage("Error processing order. Please try again.");
         } finally {
+            setIsPayLoading(false);
             hideLoader();
         }
     };
@@ -315,6 +342,7 @@ function ReviewOrderPage() {
                                         placeholder="Enter voucher code"
                                         value={voucherCode}
                                         onChange={(e) => setVoucherCode(e.target.value)}
+                                        maxLength={30}
                                         disabled={voucherApplied}
                                     />
                                     <button 
@@ -354,8 +382,15 @@ function ReviewOrderPage() {
                                 </div>
                             </div>
 
-                            <button className="pay-btn" onClick={handlePay}>
-                                Pay ${total.toFixed(2)}
+                            <button className="pay-btn" onClick={handlePay} disabled={isPayLoading}>
+                                {isPayLoading ? (
+                                    <span className="button-spinner">
+                                        <span className="spinner"></span>
+                                        Processing...
+                                    </span>
+                                ) : (
+                                    `Pay $${total.toFixed(2)}`
+                                )}
                             </button>
 
                             <div className="security-badges">
@@ -386,7 +421,7 @@ function ReviewOrderPage() {
                         {addresses.map((address) => (
                             <div 
                                 key={address.addressID} 
-                                className={`address-option ${address.isSelected ? "selected" : ""}`}
+                                className={`address-option ${address.isSelected ? "selected" : ""} ${isChangingAddress ? "loading" : ""}`}
                                 onClick={() => handleChangeAddress(address.addressID)}
                             >
                                 <div className="review-address-radio">
@@ -394,6 +429,7 @@ function ReviewOrderPage() {
                                         type="radio"
                                         name="address"
                                         checked={address.isSelected}
+                                        disabled={isChangingAddress}
                                         readOnly
                                     />
                                 </div>
@@ -402,6 +438,9 @@ function ReviewOrderPage() {
                                     <p>{address.addressLine1}</p>
                                     <p>{address.city}, {address.postalCode}</p>
                                 </div>
+                                {isChangingAddress && (
+                                    <div className="review-address-updating">Updating...</div>
+                                )}
                             </div>
                         ))}
                     </div>
@@ -424,6 +463,7 @@ function ReviewOrderPage() {
                                 placeholder="Home"
                                 value={newAddressForm.addressLabel}
                                 onChange={(e) => setNewAddressForm({...newAddressForm, addressLabel: e.target.value})}
+                                maxLength={50}
                             />
                         </div>
                         <div className="review-form-group">
@@ -433,6 +473,7 @@ function ReviewOrderPage() {
                                 placeholder="Street address"
                                 value={newAddressForm.addressLine1}
                                 onChange={(e) => setNewAddressForm({...newAddressForm, addressLine1: e.target.value})}
+                                maxLength={120}
                             />
                         </div>
                         <div className="review-form-group">
@@ -442,6 +483,7 @@ function ReviewOrderPage() {
                                 placeholder="City"
                                 value={newAddressForm.city}
                                 onChange={(e) => setNewAddressForm({...newAddressForm, city: e.target.value})}
+                                maxLength={50}
                             />
                         </div>
                         <div className="review-form-group">
@@ -451,11 +493,19 @@ function ReviewOrderPage() {
                                 placeholder="Postal Code"
                                 value={newAddressForm.postalCode}
                                 onChange={(e) => setNewAddressForm({...newAddressForm, postalCode: e.target.value})}
+                                maxLength={4}
                             />
                         </div>
                         <div className="review-form-actions">
-                            <button className="review-save-address-btn" onClick={handleAddNewAddress}>
-                                Save Address
+                            <button className="review-save-address-btn" onClick={handleAddNewAddress} disabled={isAddressLoading}>
+                                {isAddressLoading ? (
+                                    <span className="button-spinner">
+                                        <span className="spinner"></span>
+                                        Saving...
+                                    </span>
+                                ) : (
+                                    "Save Address"
+                                )}
                             </button>
                             <button 
                                 className="review-cancel-btn" 
