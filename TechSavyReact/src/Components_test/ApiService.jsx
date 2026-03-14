@@ -1,6 +1,6 @@
 // src/services/apiService.js
-// const basePath = "https://techsavy-api-6c5y.onrender.com/api/TechSavy/";
-const basePath = "https://localhost:7272/api/TechSavy/";
+const basePath = "https://techsavy-api-6c5y.onrender.com/api/TechSavy/";
+
 
 async function handleResponse(response) {
     // 1. If it's a 200 OK success, just return the data normally
